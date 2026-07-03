@@ -1,0 +1,89 @@
+* {
+  box-sizing: border-box; /* Prevents elements from stretching wider than the screen */
+  margin: 0;
+  padding: 0;
+}
+
+.landingPageContainer {
+  width: 100vw;
+  min-height: 100vh;
+  background: rgb(18, 7, 30);
+  background-repeat: no-repeat;
+  background-size: cover;
+  color: white;
+}
+
+
+.landingPageContainer nav {
+  padding-inline: 3rem;
+  padding-block: 1.6rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.landingPageContainer nav h2 {
+  font-size: 1.8rem;
+  font-weight: 500;
+}
+
+.landingPageContainer nav .navlist {
+  display: flex;
+  gap: 1.6rem;
+  cursor: pointer;
+}
+
+.landingMainContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-inline: 3rem;
+  flex-grow: 1;
+  padding-top: 25vh;
+}
+
+.landingMainContainer > div:nth-child(1) {
+  flex: 1;
+}
+
+.landingMainContainer > div:nth-child(1) h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.landingMainContainer > div:nth-child(1) p {
+  font-size: 1.2rem;
+  opacity: 0.8;
+}
+
+.landingMainContainer > div:nth-child(1) div[role='button']{
+  background-color: #D97500;
+  width: fit-content;
+  padding: 1rem;
+  border-radius: 20px;
+}
+
+.landingMainContainer > div:nth-child(1) div[role='button']{
+  text-decoration: none;
+  color: white;
+  font-size: 1.7rem;
+}
+
+.landingMainContainer > div:nth-child(2) {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: -10vh;
+  height: 50vh;
+  width: auto;
+}
+
+
+.landingMainContainer > div:nth-child(2) img {
+  max-width: 450px;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+

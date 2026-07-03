@@ -1,0 +1,9 @@
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh;
+  background-color: rgb(18, 7, 30); /* Syncs the root backdrop */
+  overflow-x: hidden; /* Stops horizontal shift completely */
+}
+
