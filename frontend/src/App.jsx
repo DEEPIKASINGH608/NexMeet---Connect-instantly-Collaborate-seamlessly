@@ -4,6 +4,7 @@ import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import LandingPage from './pages/landing';
 import { AuthProvider } from './contexts/AuthContext';
 import Authentication from './pages/authentication';
+import NexMeetComponent from './pages/NexMeetComponent';
 
 function App() {
 
@@ -17,7 +18,9 @@ function App() {
 
           <Route path='/' element={<LandingPage />} />
 
-          <Route path='/auth' element={Authentication } />
+          <Route path='/auth' element={<Authentication />} />
+          <Route path='/url' elements={<NexMeetComponent />} />
+
         </Routes>
 
         </AuthProvider>
@@ -27,4 +30,4 @@ function App() {
   )
 }
 
-export default App
+export default App;
