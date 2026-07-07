@@ -19,7 +19,7 @@ function App() {
           <Route path='/' element={<LandingPage />} />
 
           <Route path='/auth' element={<Authentication />} />
-          <Route path='/url' elements={<NexMeetComponent />} />
+          <Route path='/:url' element={<NexMeetComponent />} />
 
         </Routes>
 
@@ -27,7 +27,7 @@ function App() {
 
       </Router>
     </div>
-  )
+  );
 }
 
 export default App;
