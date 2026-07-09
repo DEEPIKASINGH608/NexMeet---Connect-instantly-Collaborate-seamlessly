@@ -159,9 +159,9 @@ export default function NexMeetComponent() {
 
           connections[socketId] = new RTCPeerConnection(peerConfigConnections)
 
-          connections[socketListId].oniceCandidate = (event) =>{
+          connections[socketListId].oniceCandidate = (event) => {
             if (event.candidate !== null) {
-              socketRef.current.emit("signal", socketListId, JSON.stringify({ 'ice':event.candidate }))
+              socketRef.current.emit("signal", socketListId, JSON.stringify({ 'ice': event.candidate }))
             }
           }
 
@@ -169,7 +169,7 @@ export default function NexMeetComponent() {
 
             let videoExists = VideoRef.current.find(video => video.socketId === socketListId);
 
-            if(videoExists) {
+            if (videoExists) {
               setVideo(videos => {
                 const updateVideos = videos.map(video =>
                   video.sockeId === socketListId ? { ...video, stream: event.stream } : video
@@ -183,20 +183,41 @@ export default function NexMeetComponent() {
               let newVideo = {
                 socketId: socketListId,
                 stream: event.stream,
-                autoPlay:true,
-                playsinline:true
+                autoPlay: true,
+                playsinline: true
               }
 
               setVideos(videos => {
-                const updateVideos = [ ...videos, newVideo];
+                const updateVideos = [...videos, newVideo];
                 videoRef.current = updatedVideos;
                 return updatedVideos;
               })
 
             }
+          };
+
+          if (window.localStream !== undefined && window.localStream !== null) {
+            connections[socketListId].addStream(window.localStream);
+          } else {
+            let blackSilence
           }
 
         })
+
+        if (id === socketIdRef.current) continue
+
+        try {
+          connections[id2].addStream(window.localStream)
+        } catch (e) {
+
+          connections[id2].createOffer().then((description) => {
+            connections[id2].setLocalDescription(description)
+              .then(() => {
+                socketRef.current.emit("signal", id2, JSON.stringify({ "sdp": connections[id2].localDescription }))
+              })
+              .catch(e => console.log(e))
+          })
+        }
       })
     })
   }
