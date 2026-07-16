@@ -1,92 +1,102 @@
-NexMeet
+NexMeet 🚀
 Connect Instantly, Collaborate Seamlessly
-NexMeet is a real-time video conferencing application designed to replicate core Zoom/Google Meet features. Built on a modern tech stack, it enables peer-to-peer audio and video communication, dynamic meeting room generation, and user authentication wrapped in a dark-blue user interface.
+NexMeet is a high-performance, real-time video conferencing platform built to mirror core functionalities of modern meeting applications like Zoom and Google Meet. Designed with a sleek, technical dark-blue user interface, NexMeet leverages cutting-edge web technologies to achieve ultra-low latency peer-to-peer audio and video interaction.
 
-🚀 Key Features
-Real-Time Video & Audio Calling: Powered by WebRTC and Google's public STUN servers for seamless peer-to-peer media streams.
+✨ Features at a Glance
+⚡ Ultra-Low Latency Video & Audio: Powered by modern WebRTC implementations and specialized STUN servers to guarantee seamless peer-to-peer media synchronization.
 
-Dynamic Room Routing: Join or create custom meetings instantly via unique URLs (e.g., /room-id).
+🔗 Dynamic Room Architecture: Instant room creation and dynamic parameter routing—join any call on the fly simply by navigating to a custom URL parameter (e.g., /t6yuhu).
 
-Secure User Management: Full authentication system offering Registration and Login flows.
+🔐 Secure Authentication Pipeline: Integrated registration, token persistence, and encrypted session login management using a secure backend authentication wrapper.
 
-Modern Blue Tech UI: Styled with a dark-slate theme using React Material UI (MUI) components.
+🎨 Precision Tech UI: A beautiful, scannable modern interface built natively with React Material UI (MUI v5) structured around a deep slate-midnight aesthetic.
 
-Robust Backend: Node.js/Express server backed by MongoDB to manage users, sessions, and meeting histories.
+🛡️ Production-Ready Architecture: Designed around complete separation of concerns with a clear structural split between client assets and API handling.
 
-🛠️ Tech Stack
-Frontend
-React (Powered by Vite for ultra-fast builds)
+🛠️ Tech Stack & Architecture
+Frontend System
+React 18+ & Vite: Sub-millisecond Hot Module Replacement (HMR) and ultra-clean bundling infrastructure.
 
-Material UI (MUI v5) for component design
+Material UI (MUI v5): Styled with custom theme decorators and dark-mode injection.
 
-React Router DOM for dynamic room routing
+React Router DOM: Contextual navigation handling dynamic endpoints out-of-the-box.
 
-WebRTC for peer-to-peer connection streams
+WebRTC API: Native browser media capture and real-time signaling handlers.
 
-Backend
-Node.js & Express
+Backend Core API
+Node.js & Express Framework: Scalable HTTP handling routing matrix.
 
-MongoDB (via Mongoose)
+MongoDB & Mongoose ODM: Fully managed persistence layer tracking user data models.
 
-Socket.io (used for WebRTC signaling and coordinate room entry)
+Socket.io: WebRTC connection architecture orchestrating concurrent server signaling streams.
 
-📦 Project Structure
+📂 Repository Anatomy
 Plaintext
-ZoomClone/
-├── backend/            # Express server, database connections & routing
+NexMeet-Connect/
+├── backend/                  # Monolithic API Engine & Data Schema
 │   ├── src/
-│   │   └── app.js     # Server entry point (Port 8000)
-│   └── package.json
-└── frontend/           # React client-side application
+│   │   ├── models/           # Mongoose Database Schemas
+│   │   ├── controllers/      # Auth & Meeting Business Logic
+│   │   └── app.js            # Server Initialization Pipeline (Port: 8000)
+│   ├── .env.example          # Environment Variable Blueprints
+│   └── package.json          # Server-side Module Configurations
+│
+└── frontend/                 # Client UI Engine & State Providers
     ├── src/
-    │   ├── pages/     # Landing, Authentication, and Room components
-    │   ├── App.jsx    # Client router setup
-    │   └── main.jsx
-    └── package.json    # Vite configurations (Port 5173)
-⚙️ Setup & Installation
-Prerequisites
-Node.js (v16.x or higher recommended)
+    │   ├── components/       # Global Shared Interface Elements
+    │   ├── contexts/         # React Application Context Layers (Auth/Signaling)
+    │   ├── pages/            # View Templates (Landing, Auth, Video Engine)
+    │   ├── App.jsx           # Client Dynamic Routing Matrix
+    │   └── main.jsx          # UI Dom Mount Point
+    ├── vite.config.js        # High-Performance Vite Build Matrix
+    └── package.json          # Client-side Dependency Manifest (Port: 5173)
+⚙️ Orchestration & Installation
+Core System Requirements
+Node.js (LTS Build v18.x or higher recommended)
 
-MongoDB Atlas account or a local MongoDB instance
+MongoDB Engine (Local configuration instance or a live cloud-hosted MongoDB Atlas Cluster)
 
-1. Backend Setup
-Navigate to the backend directory:
+1. Spin Up the Backend API System
+Navigate to the engine directory, isolate dependencies, and fire up your server layer:
 
 Bash
 cd backend
-Install the server dependencies:
-
-Bash
 npm install
-Create a .env file in the backend root directory and add your MongoDB connection string and server port:
+Configure your local infrastructure rules. Create a file named .env inside your backend/ directory root and map your keys:
 
 Code snippet
 PORT=8000
-MONGO_URL=your_mongodb_connection_string
-Start your development API server:
+MONGO_URL=your_secured_mongodb_connection_string
+JWT_SECRET=your_custom_cryptographic_signing_key
+Execute the start script to boot up your API engine:
 
 Bash
 npm start
-Your backend server should now be listening on http://localhost:8000
+Terminal Readout Target:
+MONGO connected DB Host: ...
 
-2. Frontend Setup
-Open a new terminal window and navigate to the frontend directory:
+Listening on port 8000
+
+2. Launch the React Frontend Client
+Open up a secondary terminal terminal multiplexer panel, jump into your UI source directory, and initialize dependencies:
 
 Bash
 cd frontend
-Install the web dependencies:
-
-Bash
 npm install
-Spin up the Vite development server:
+Initialize your client development runtime server:
 
 Bash
 npm run dev
-Your frontend application will launch on http://localhost:5173
+Terminal Readout Target:
+VITE ready in XX ms
 
-🎮 How to Use NexMeet
-Open http://localhost:5173 in your browser.
+➜  Local:   http://localhost:5173/
 
-Click Get Started or Login to create an account or authenticate.
+🎮 Workflow Execution Blueprint
+Accessing the Portal: Open your modern web browser profile to http://localhost:5173.
 
-Once logged in, generate a meeting link or type in a unique meeting ID (e.g., http://localhost:5173/my-custom-room) to begin an active video call stream!
+Access Control Management: Click Get Started or Login to trigger the authentication UI. Provide credentials to securely establish an active context session token.
+
+Spawning dynamic calls: Generate or directly append any custom identifier string into your browser URL path block (e.g., http://localhost:5173/my-private-sync-room).
+
+Active Streaming: Grant microphone and web-camera operating permissions in your browser dialog window when requested to safely initiate the underlying automated WebRTC handshakes.
