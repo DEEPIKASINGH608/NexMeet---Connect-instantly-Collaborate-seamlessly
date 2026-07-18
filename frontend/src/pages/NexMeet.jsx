@@ -132,7 +132,9 @@ export default function NexMeetComponent() {
 
       } catch(e) {console.log(e)}
 
-      
+      let blackSilence = (...args) => new MediaStream([black(...args), silence()]);
+      window.localStream = blackSilence();
+      localVideoRef.current.srcObject = window.localStream;
 
       for (let id in connections) {
         connections[id].addStream(window.localStream)
@@ -146,6 +148,27 @@ export default function NexMeetComponent() {
       }
     })
   };
+
+
+  let silence = () => {
+    let ctx = new AudioContext()
+    let oscillator = ctx.createOscillator();
+
+    let dst = oscillator.connect(ctx.createMediaStreamDestination());
+
+    oscillator.start();
+    ctx.resume()
+    return Object.assign(dst.stream.getAudioTracks()[0], { enabled: false })
+  }
+
+
+  let black = ({width = 640, height = 480} = {}) => {
+    let canvas = Object.assign(document.createElement("canvas"), {width, height});
+
+    canvas.getContext('2d').fillReac(0, 0, width, height);
+    let stream = canvas.captureStream();
+    return Object.assign(dst.stream.getAudioTracks()[0], { enabled: false })
+  }
 
   let getUserMedia = () => {
     if ((video && videoAvailble) || (audio && audioAvailble)) {
@@ -260,7 +283,9 @@ export default function NexMeetComponent() {
           if (window.localStream !== undefined && window.localStream !== null) {
             connections[socketListId].addStream(window.localStream);
           } else {
-            let blackSilence
+            let blackSilence = (...args) => new MediaStream([black(...args), silence()]);
+            window.localStream = blackSilence();
+            connections[socketListId].addStream(window.localStream);
           }
 
         })
