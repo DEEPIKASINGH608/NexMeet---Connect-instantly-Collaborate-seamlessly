@@ -141,7 +141,7 @@ export default function NexMeetComponent() {
         connections[id].createOffer().then((description) => {
             connections[id].setLocalDescription(description)
             .then(() => {
-              socketRef.current.emit("signal", id, JSON.stringify({"sdp": connections[id].}))
+              socketRef.current.emit("signal", id, JSON.stringify({ "sdp": connections[id].localDescription }));
 
             }).catch(e=> console.log(e));
         })
@@ -208,7 +208,7 @@ export default function NexMeetComponent() {
               })
             })
           }
-        }
+        })
       }
     }
   }
@@ -290,7 +290,7 @@ export default function NexMeetComponent() {
 
         })
 
-        if (id === socketIdRef.current) continue
+        if (id === socketIdRef.current) return;
 
         try {
           connections[id2].addStream(window.localStream)
