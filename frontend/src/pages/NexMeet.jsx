@@ -351,7 +351,7 @@ export default function NexMeetComponent() {
             marginTop: "10px",
             background: "#000"
           }}>
-            <video
+            <video className='meetUserVideo'
               ref={localVideoRef}
               autoPlay
               muted
@@ -362,8 +362,6 @@ export default function NexMeetComponent() {
                 display: "block"
               }}>
             </video>
-
-
             {videos.map((video) => {
               <div key={video.socketId}>
                         <h2>{video.socketId}</h2>
