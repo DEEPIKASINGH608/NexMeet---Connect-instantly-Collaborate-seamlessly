@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { TextField, Button } from '@mui/material';
 
-import "../styles/videoComponent.css";
+import "../styles/videoComponent.module.css";
 
 const server_url = "http://localhost:8000";
 
@@ -351,7 +351,9 @@ export default function NexMeetComponent() {
             marginTop: "10px",
             background: "#000"
           }}>
-            <video className='meetUserVideo'
+
+            
+            <video className={styles.meetUserVideo}
               ref={localVideoRef}
               autoPlay
               muted
@@ -363,7 +365,7 @@ export default function NexMeetComponent() {
               }}>
             </video>
             {videos.map((video) => {
-              <div key={video.socketId}>
+              <div className={styles.conferenceView} key={video.socketId}>
                         <h2>{video.socketId}</h2>
 
                         <video
