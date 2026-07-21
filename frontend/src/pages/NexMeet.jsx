@@ -5,6 +5,9 @@ import io from 'socket.io-client';
 import VideoCamIcon from '@mui/icons-material/VideoCam';
 import VideocamOffIcon from '@mui/icons-material/VideocamOff'
 import styles from "../styles/videoComponent.module.css";
+import CallEndIcon from '@mui/icons-material/CallEnd';
+import MicIcon from '@mui/icons-material/Mic'
+import MicIconOffIcon from '@mui/icons-material/MicOff'
 
 
 const server_url = "http://localhost:8000";
@@ -343,10 +346,20 @@ export default function NexMeetComponent() {
             background: "#000"
           }}>
             <div className={styles.meetVideoContainer}>
-              <div className={styles.buttonContainer}>
+
+              <div className={styles.buttonContainers}>
+
                 <IconButton style={{color: "white" }}>
                   {(video === true) ? <VideocamIcon /> : <VideocamOffIcon /> }
                 </IconButton>
+
+                <IconButton style={{color: "white"}}>
+                  <CallEnd />
+                </IconButton>
+                <IconButton style={{color: "white"}}>
+                  {audio === true ? <MicIco /> : <MicOffIcon/>}
+                  </IconButton>
+
               </div>
 
               <video
