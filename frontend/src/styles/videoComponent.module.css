@@ -13,6 +13,17 @@
     border-radius: 20px;
 }
 
+.buttonContainers {
+    position: absolute;
+    width: 100vw;
+    bottom: 0;
+    text-align: center;
+}
+
+.buttonContainers > button {
+    font-size: 90px;
+}
+
 .conferenceView {
 
 }
