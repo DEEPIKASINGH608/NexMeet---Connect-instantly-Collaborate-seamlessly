@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { TextField, Button, Input } from '@mui/material';
+import { TextField, Button, Input, IconButton } from '@mui/material';
 import io from 'socket.io-client';
 import VideoCamIcon from '@mui/icons-material/VideoCam';
 import VideocamOffIcon from '@mui/icons-material/VideocamOff'
@@ -8,7 +8,7 @@ import styles from "../styles/videoComponent.module.css";
 import CallEndIcon from '@mui/icons-material/CallEnd';
 import MicIcon from '@mui/icons-material/Mic'
 import MicIconOffIcon from '@mui/icons-material/MicOff'
-
+import ScreenShareIcon from '@mui/icons-material/ScreenShareIcon'
 
 const server_url = "http://localhost:8000";
 
@@ -354,11 +354,26 @@ export default function NexMeetComponent() {
                 </IconButton>
 
                 <IconButton style={{color: "white"}}>
-                  <CallEnd />
+                  <CallEndIcon />
                 </IconButton>
+
                 <IconButton style={{color: "white"}}>
-                  {audio === true ? <MicIco /> : <MicOffIcon/>}
-                  </IconButton>
+                  {audio === true ? <MicIcon /> : <MicOffIcon/>}
+                </IconButton>
+
+
+                {screenAvailable === true ?
+                <IconButton>
+                  {screen === true ? <ScreenShareIcon /> : <StopScreenShareIcon /> }
+                </IconButton> : <></>
+                }
+
+                <Badge badgeContent={newMessages} max={999} color='orange'>
+                  <IconButton style={{ color: "white" }}>
+                <ChatIcon/>
+                </IconButton>
+                </Badge>
+
 
               </div>
 
