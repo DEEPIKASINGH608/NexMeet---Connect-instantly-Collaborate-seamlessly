@@ -374,7 +374,6 @@ export default function NexMeetComponent() {
                 </IconButton>
                 </Badge>
 
-
               </div>
 
               <video
