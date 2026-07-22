@@ -39,7 +39,7 @@ export default function NexMeetComponent() {
   let [screenAvailable, setScreenAvailable] = useState();
   let [messages, setMessages] = useState([]);
   let [message, setMessage] = useState("");
-  let [newMessages, setNewMessages] = useState(0);
+  let [newMessages, setNewMessages] = useState(3);
   let [askForUsername, setAskForUsername] = useState(true);
   let [username, setUsername] = useState("");
   let [videos, setVideos] = useState([]);
@@ -314,6 +314,16 @@ export default function NexMeetComponent() {
     setAskForUsername(false);
     getMedia();
   };
+
+
+  let handleVideo = () => {
+    setVideo(!video);
+  }
+
+  let handleAudio = () => {
+    setAudio(!audio)
+  }
+
 
   return (
     <div>
