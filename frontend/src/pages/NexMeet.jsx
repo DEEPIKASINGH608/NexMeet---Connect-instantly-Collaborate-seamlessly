@@ -359,7 +359,7 @@ export default function NexMeetComponent() {
 
               <div className={styles.buttonContainers}>
 
-                <IconButton style={{color: "white" }}>
+                <IconButton onClick={handleVideo} style={{color: "white" }}>
                   {(video === true) ? <VideocamIcon /> : <VideocamOffIcon /> }
                 </IconButton>
 
@@ -367,7 +367,7 @@ export default function NexMeetComponent() {
                   <CallEndIcon />
                 </IconButton>
 
-                <IconButton style={{color: "white"}}>
+                <IconButton onClick={handleAudio} style={{color: "white"}}>
                   {audio === true ? <MicIcon /> : <MicOffIcon/>}
                 </IconButton>
 
