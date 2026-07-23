@@ -26,5 +26,11 @@
 
 .conferenceView {
 
+    display: flex;
+
 }
 
+.conferenceView > video {
+    width: 40vw;
+    min-width: 30vw;
+}
