@@ -27,10 +27,13 @@
 .conferenceView {
 
     display: flex;
+    padding: 10px;
+    gap: 10px;
 
 }
 
 .conferenceView > video {
     width: 40vw;
     min-width: 30vw;
+    border-radius: 10px;
 }

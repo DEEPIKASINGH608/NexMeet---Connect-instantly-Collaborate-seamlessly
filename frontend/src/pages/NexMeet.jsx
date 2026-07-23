@@ -400,11 +400,13 @@ export default function NexMeetComponent() {
                 }}
               />
 
+              <div>
+
               {videos.map((video) => (
                 <div className={styles.conferenceView} key={video.socketId}>
                   <h2>{video.socketId}</h2>
                   <video
-                  class
+
                     data-socket={video.socketId}
                     ref={ref => {
                       if (ref && video.stream) {
@@ -415,6 +417,8 @@ export default function NexMeetComponent() {
                   />
                 </div>
               ))}
+
+              </div>
             </div>
           </div>
         </div>
