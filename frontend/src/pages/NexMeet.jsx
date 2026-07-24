@@ -66,6 +66,10 @@ export default function NexMeetComponent() {
         setScreenAvailable(false);
       }
 
+
+
+
+
       if (videoAvailable || audioAvailable) {
         const userMediaStream = await navigator.mediaDevices.getUserMedia({ video: videoAvailable, audio: audioAvailable });
 
@@ -76,6 +80,8 @@ export default function NexMeetComponent() {
           }
         }
       }
+
+      
     } catch (err) {
       console.log("Permissions rejected or unavailable:", err);
     }

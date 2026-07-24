@@ -29,7 +29,6 @@ export default function AuthForm() {
     const [error, setError] = React.useState('');
     const [message, setMessage] = React.useState('');
     const location = useLocation();
-
     const initialFormState = location.state?.defaultForm !== undefined ? location.state.defaultForm : 0;
     const [formState, setFormState] = React.useState(initialFormState);
     const [open, setOpen] = React.useState(false);
