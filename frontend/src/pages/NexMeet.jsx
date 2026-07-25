@@ -65,11 +65,6 @@ export default function NexMeetComponent() {
       } else {
         setScreenAvailable(false);
       }
-
-
-
-
-
       if (videoAvailable || audioAvailable) {
         const userMediaStream = await navigator.mediaDevices.getUserMedia({ video: videoAvailable, audio: audioAvailable });
 
@@ -81,7 +76,7 @@ export default function NexMeetComponent() {
         }
       }
 
-      
+
     } catch (err) {
       console.log("Permissions rejected or unavailable:", err);
     }
@@ -222,7 +217,7 @@ export default function NexMeetComponent() {
     }
   };
 
-  let addMessage = () => {};
+  let addMessage = () => { };
 
   let connectToSocketServer = () => {
     socketRef.current = io.connect(server_url, { secure: false });
@@ -365,29 +360,29 @@ export default function NexMeetComponent() {
 
               <div className={styles.buttonContainers}>
 
-                <IconButton onClick={handleVideo} style={{color: "white" }}>
-                  {(video === true) ? <VideocamIcon /> : <VideocamOffIcon /> }
+                <IconButton onClick={handleVideo} style={{ color: "white" }}>
+                  {(video === true) ? <VideocamIcon /> : <VideocamOffIcon />}
                 </IconButton>
 
-                <IconButton style={{color: "white"}}>
+                <IconButton style={{ color: "white" }}>
                   <CallEndIcon />
                 </IconButton>
 
-                <IconButton onClick={handleAudio} style={{color: "white"}}>
-                  {audio === true ? <MicIcon /> : <MicOffIcon/>}
+                <IconButton onClick={handleAudio} style={{ color: "white" }}>
+                  {audio === true ? <MicIcon /> : <MicOffIcon />}
                 </IconButton>
 
 
                 {screenAvailable === true ?
-                <IconButton>
-                  {screen === true ? <ScreenShareIcon /> : <StopScreenShareIcon /> }
-                </IconButton> : <></>
+                  <IconButton>
+                    {screen === true ? <ScreenShareIcon /> : <StopScreenShareIcon />}
+                  </IconButton> : <></>
                 }
 
                 <Badge badgeContent={newMessages} max={999} color='orange'>
                   <IconButton style={{ color: "white" }}>
-                <ChatIcon/>
-                </IconButton>
+                    <ChatIcon />
+                  </IconButton>
                 </Badge>
 
               </div>
@@ -408,21 +403,21 @@ export default function NexMeetComponent() {
 
               <div>
 
-              {videos.map((video) => (
-                <div className={styles.conferenceView} key={video.socketId}>
-                  <h2>{video.socketId}</h2>
-                  <video
+                {videos.map((video) => (
+                  <div className={styles.conferenceView} key={video.socketId}>
+                    <h2>{video.socketId}</h2>
+                    <video
 
-                    data-socket={video.socketId}
-                    ref={ref => {
-                      if (ref && video.stream) {
-                        ref.srcObject = video.stream;
-                      }
-                    }}
-                    autoPlay
-                  />
-                </div>
-              ))}
+                      data-socket={video.socketId}
+                      ref={ref => {
+                        if (ref && video.stream) {
+                          ref.srcObject = video.stream;
+                        }
+                      }}
+                      autoPlay
+                    />
+                  </div>
+                ))}
 
               </div>
             </div>
@@ -431,7 +426,7 @@ export default function NexMeetComponent() {
       ) : (
         <div style={{ color: "white", padding: "20px" }}>
           <h2>Connected to Call as: {username}</h2>
-          </div>
+        </div>
       )}
     </div>
   );
