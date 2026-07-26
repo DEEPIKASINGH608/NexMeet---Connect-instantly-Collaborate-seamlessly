@@ -8,7 +8,8 @@ import styles from "../styles/videoComponent.module.css";
 import CallEndIcon from '@mui/icons-material/CallEnd';
 import MicIcon from '@mui/icons-material/Mic'
 import MicIconOffIcon from '@mui/icons-material/MicOff'
-import ScreenShareIcon from '@mui/icons-material/ScreenShareIcon'
+import ScreenShareIcon from "@mui/icons-material/ScreenShare";
+
 
 const server_url = "http://localhost:8000";
 
@@ -401,7 +402,7 @@ export default function NexMeetComponent() {
                 }}
               />
 
-              <div>
+              <div className={styles.conference}>
 
                 {videos.map((video) => (
                   <div className={styles.conferenceView} key={video.socketId}>
