@@ -326,6 +326,15 @@ export default function NexMeetComponent() {
     setAudio(!audio)
   }
 
+  useEffect(()=> {
+    if(screen !== undefined) {
+      getDisplayMedia();
+    }
+  }, [screen])
+  let handleScreen = () => {
+    setScreen(!screen)
+  }
+
 
   return (
     <div>
