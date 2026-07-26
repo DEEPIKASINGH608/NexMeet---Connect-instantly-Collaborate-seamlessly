@@ -460,32 +460,32 @@ export default function NexMeetComponent() {
 
 
   // Function to safely disconnect media tracks, sockets, and leave the meeting
-const handleEndCall = () => {
-  try {
-    // 1. Stop all local camera and microphone tracks
-    if (window.localStream) {
-      window.localStream.getTracks().forEach(track => track.stop());
-    }
-
-    // 2. Close all active WebRTC peer connections
-    for (let id in connections) {
-      if (connections[id]) {
-        connections[id].close();
+  const handleEndCall = () => {
+    try {
+      // 1. Stop all local camera and microphone tracks
+      if (window.localStream) {
+        window.localStream.getTracks().forEach(track => track.stop());
       }
-    }
-    connections = {}; // Reset connections object
 
-    // 3. Disconnect socket connection
-    if (socketRef.current) {
-      socketRef.current.disconnect();
-    }
+      // 2. Close all active WebRTC peer connections
+      for (let id in connections) {
+        if (connections[id]) {
+          connections[id].close();
+        }
+      }
+      connections = {}; // Reset connections object
 
-    // 4. Redirect user back to home or lobby
-    window.location.href = "/home"; // Change "/home" to whatever route you want after leaving
-  } catch (err) {
-    console.error("Error ending call:", err);
-  }
-};
+      // 3. Disconnect socket connection
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+      }
+
+      // 4. Redirect user back to home or lobby
+      window.location.href = "/home"; // Change "/home" to whatever route you want after leaving
+    } catch (err) {
+      console.error("Error ending call:", err);
+    }
+  };
 
 
   return (
@@ -513,88 +513,209 @@ const handleEndCall = () => {
             </Button>
           </div>
 
+          return (
           <div style={{
-            position: "fixed",
-            bottom: "20px",
-            left: "50%",
-            transform: "translateX(-50%)",
+            minHeight: "100vh",
+            backgroundColor: "#0d0e12",
             display: "flex",
-            gap: "15px",
-            backgroundColor: "rgba(20, 20, 20, 0.85)",
-            padding: "10px 25px",
-            borderRadius: "30px",
-            backdropFilter: "blur(10px)",
             alignItems: "center",
-            zIndex: 1000
+            justifyContent: "center",
+            padding: "20px",
+            fontFamily: "'Roboto', 'Segoe UI', sans-serif"
           }}>
-            {/* Video Toggle Button */}
-            <IconButton
-              onClick={handleVideo}
-              style={{
-                color: video ? "#fff" : "#f44336",
-                backgroundColor: "#333",
-                padding: "12px"
-              }}
-            >
-              {video ? <VideocamIcon style={{ fontSize: 28 }} /> : <VideocamOffIcon style={{ fontSize: 28 }} />}
-            </IconButton>
+            {askForUsername === true ? (
+              /* --- LOBBY CONTAINER --- */
+              <div style={{
+                display: "flex",
+                flexDirection: "row",
+                flexWrap: "wrap",
+                backgroundColor: "#161922",
+                borderRadius: "16px",
+                padding: "30px",
+                boxShadow: "0 10px 30px rgba(0,0,0,0.5)",
+                gap: "30px",
+                maxWidth: "900px",
+                width: "100%",
+                alignItems: "center",
+                justifyContent: "center"
+              }}>
 
-            {/* Audio / Mic Toggle Button */}
-            <IconButton
-              onClick={handleAudio}
-              style={{
-                color: audio ? "#fff" : "#f44336",
-                backgroundColor: "#333",
-                padding: "12px"
-              }}
-            >
-              {audio ? <MicIcon style={{ fontSize: 28 }} /> : <MicOffIcon style={{ fontSize: 28 }} />}
-            </IconButton>
+                {/* Left Side: Video Preview Box */}
+                <div style={{
+                  flex: "1 1 400px",
+                  position: "relative",
+                  borderRadius: "12px",
+                  overflow: "hidden",
+                  backgroundColor: "#000",
+                  maxHeight: "360px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center"
+                }}>
+                  <video
+                    ref={localVideoRef}
+                    autoPlay
+                    muted
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      display: "block"
+                    }}
+                  />
+                </div>
 
-            {/* End Call Button */}
-            <IconButton
-              onClick={handleEndCall} // Make sure you have a handleEndCall function defined
-              style={{
-                color: "#fff",
-                backgroundColor: "#d32f2f",
-                padding: "12px"
-              }}
-            >
-              <CallEndIcon style={{ fontSize: 28 }} />
-            </IconButton>
+                {/* Right Side: Form Controls */}
+                <div style={{
+                  flex: "1 1 300px",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "20px"
+                }}>
+                  <div>
+                    <h2 style={{ color: "#fff", fontSize: "1.8rem", margin: "0 0 8px 0" }}>
+                      Ready to join?
+                    </h2>
+                    <p style={{ color: "#8a8f9d", margin: 0, fontSize: "0.95rem" }}>
+                      Enter your display name to enter the meeting lobby.
+                    </p>
+                  </div>
 
-            {/* Screen Share Button */}
-            {screenAvailable && (
-              <IconButton
-                onClick={handleScreen}
-                style={{
-                  color: screen ? "#4caf50" : "#fff",
-                  backgroundColor: "#333",
-                  padding: "12px"
-                }}
-              >
-                {screen ? <StopScreenShareIcon style={{ fontSize: 28 }} /> : <ScreenShareIcon style={{ fontSize: 28 }} />}
-              </IconButton>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
+                    <TextField
+                      id="outlined-basic"
+                      label="Username"
+                      variant="outlined"
+                      value={username}
+                      onChange={e => setUsername(e.target.value)}
+                      sx={{
+                        width: "100%",
+                        background: "#202431",
+                        borderRadius: "8px",
+                        input: { color: "#fff" },
+                        "& .MuiOutlinedInput-root": {
+                          "& fieldset": { borderColor: "transparent" },
+                          "&:hover fieldset": { borderColor: "#1976d2" },
+                          "&.Mui-focused fieldset": { borderColor: "#1976d2" }
+                        },
+                        "& .MuiInputLabel-root": { color: "#8a8f9d" },
+                        "& .MuiInputLabel-root.Mui-focused": { color: "#1976d2" }
+                      }}
+                    />
+
+                    <Button
+                      variant="contained"
+                      onClick={connect}
+                      size="large"
+                      style={{
+                        backgroundColor: "#1976d2",
+                        padding: "12px",
+                        fontSize: "1rem",
+                        fontWeight: "bold",
+                        borderRadius: "8px",
+                        textTransform: "none"
+                      }}
+                    >
+                      Enter Lobby
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+            ) : (
+
+              /* --- ACTIVE CALL CONTAINER --- */
+              <div style={{
+                position: "relative",
+                width: "100vw",
+                height: "100vh",
+                backgroundColor: "#000",
+                overflow: "hidden"
+              }}>
+                {/* Video Call Grid */}
+                <div className={styles?.meetVideoContainer || "meetVideoContainer"} style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+                  gap: "15px",
+                  padding: "20px",
+                  height: "calc(100vh - 100px)",
+                  overflowY: "auto"
+                }}>
+                  {/* Main / Local Video */}
+                  <video
+                    ref={localVideoRef}
+                    autoPlay
+                    muted
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      borderRadius: "12px",
+                      backgroundColor: "#202431"
+                    }}
+                  />
+
+                  {/* Remote Videos Mapping */}
+                  {videos.map((video) => (
+                    <div key={video.socketId} style={{ position: "relative", borderRadius: "12px", overflow: "hidden" }}>
+                      <video
+                        data-socket={video.socketId}
+                        ref={ref => {
+                          if (ref && video.stream) ref.srcObject = video.stream;
+                        }}
+                        autoPlay
+                        style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                      />
+                    </div>
+                  ))}
+                </div>
+
+                {/* Floating Bottom Control Bar */}
+                <div style={{
+                  position: "fixed",
+                  bottom: "20px",
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  display: "flex",
+                  gap: "15px",
+                  backgroundColor: "rgba(20, 20, 20, 0.85)",
+                  padding: "10px 25px",
+                  borderRadius: "30px",
+                  backdropFilter: "blur(10px)",
+                  alignItems: "center",
+                  zIndex: 1000
+                }}>
+                  <IconButton onClick={handleVideo} style={{ color: video ? "#fff" : "#f44336", backgroundColor: "#333", padding: "12px" }}>
+                    {video ? <VideocamIcon style={{ fontSize: 24 }} /> : <VideocamOffIcon style={{ fontSize: 24 }} />}
+                  </IconButton>
+
+                  <IconButton onClick={handleAudio} style={{ color: audio ? "#fff" : "#f44336", backgroundColor: "#333", padding: "12px" }}>
+                    {audio ? <MicIcon style={{ fontSize: 24 }} /> : <MicOffIcon style={{ fontSize: 24 }} />}
+                  </IconButton>
+
+                  <IconButton onClick={handleEndCall} style={{ color: "#fff", backgroundColor: "#d32f2f", padding: "12px" }}>
+                    <CallEndIcon style={{ fontSize: 24 }} />
+                  </IconButton>
+
+                  {screenAvailable && (
+                    <IconButton onClick={handleScreen} style={{ color: screen ? "#4caf50" : "#fff", backgroundColor: "#333", padding: "12px" }}>
+                      {screen ? <StopScreenShareIcon style={{ fontSize: 24 }} /> : <ScreenShareIcon style={{ fontSize: 24 }} />}
+                    </IconButton>
+                  )}
+
+                  <Badge badgeContent={newMessages} color="primary">
+                    <IconButton onClick={() => setMessages(!messages)} style={{ color: "#fff", backgroundColor: "#333", padding: "12px" }}>
+                      <ChatIcon style={{ fontSize: 24 }} />
+                    </IconButton>
+                  </Badge>
+                </div>
+              </div>
             )}
-
-            {/* Chat Button with Badge */}
-            <Badge
-              badgeContent={newMessages}
-              max={999}
-              color="primary" // Changed from 'orange' to valid MUI color 'primary'
-            >
-              <IconButton
-                onClick={() => setMessages(!messages)}
-                style={{
-                  color: "#fff",
-                  backgroundColor: "#333",
-                  padding: "12px"
-                }}
-              >
-                <ChatIcon style={{ fontSize: 28 }} />
-              </IconButton>
-            </Badge>
           </div>
+          );
+
+
+
           <video
             className={styles.meetUserVideo}
             ref={localVideoRef}
@@ -631,11 +752,11 @@ const handleEndCall = () => {
         </div>
 
       ) : (
-    <div style={{ color: "white", padding: "20px" }}>
-      <h2>Connected to Call as: {username}</h2>
-    </div>
-  )
-}
+        <div style={{ color: "white", padding: "20px" }}>
+          <h2>Connected to Call as: {username}</h2>
+        </div>
+      )
+      }
     </div >
   );
 }
