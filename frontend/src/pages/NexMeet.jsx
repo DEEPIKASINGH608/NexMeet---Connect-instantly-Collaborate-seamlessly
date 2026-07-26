@@ -1,14 +1,17 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { TextField, Button, Input, IconButton } from '@mui/material';
+import { TextField, Button, Input, IconButton, Badge } from '@mui/material';
 import io from 'socket.io-client';
-import VideoCamIcon from '@mui/icons-material/VideoCam';
-import VideocamOffIcon from '@mui/icons-material/VideocamOff'
 import styles from "../styles/videoComponent.module.css";
-import CallEndIcon from '@mui/icons-material/CallEnd';
-import MicIcon from '@mui/icons-material/Mic'
-import MicIconOffIcon from '@mui/icons-material/MicOff'
 import ScreenShareIcon from "@mui/icons-material/ScreenShare";
+import MicIcon from '@mui/icons-material/Mic';
+import MicOffIcon from '@mui/icons-material/MicOff';
+import VideocamIcon from '@mui/icons-material/Videocam';
+import VideocamOffIcon from '@mui/icons-material/VideocamOff';
+import CallEndIcon from '@mui/icons-material/CallEnd';
+import ChatIcon from '@mui/icons-material/Chat';
+import StopScreenShareIcon from '@mui/icons-material/StopScreenShare';
+
 
 
 const server_url = "http://localhost:8000";
@@ -329,21 +332,21 @@ export default function NexMeetComponent() {
   let getDisplayMediaSuccess = (stream) => {
     try {
       window.localStream.getTracks().forEach(track => track.stop())
-    } catch(e) {console.log(e)}
+    } catch (e) { console.log(e) }
 
     window.localStream = stream;
     localVideoRef.current.srcObject = stream;
 
     for (let id in connections) {
-      if(id === socketIdRef.current) continue;
+      if (id === socketIdRef.current) continue;
 
       connections[id].addStream(window.localStream)
-      connections[id].createOffer.then((description)=> {
+      connections[id].createOffer.then((description) => {
         connections[id].setLocalDescription(description)
-        .then(()=>{
-          socketRef.current.emit("signal", id, JSON.stringify({"sdp": connections[id].localDescription}))
-        })
-        .catch(e => console.log(e))
+          .then(() => {
+            socketRef.current.emit("signal", id, JSON.stringify({ "sdp": connections[id].localDescription }))
+          })
+          .catch(e => console.log(e))
       })
     }
 
@@ -364,27 +367,27 @@ export default function NexMeetComponent() {
         localVideoRef.current.srcObject = window.localStream;
       }
 
-        getUserMedia();
+      getUserMedia();
     });
 
 
   }
 
   let getDisplayMedia = () => {
-    if(screen) {
-      if(navigator.mediaDevices.getDisplayMedia) {
-        navigator.mediaDevices.getDisplayMedia({video: true, audio:true })
-        .then(getDisplayMediaSuccess)
-        .then((stream) => {
+    if (screen) {
+      if (navigator.mediaDevices.getDisplayMedia) {
+        navigator.mediaDevices.getDisplayMedia({ video: true, audio: true })
+          .then(getDisplayMediaSuccess)
+          .then((stream) => {
 
-        })
-        .catch((e) => console.log(e))
+          })
+          .catch((e) => console.log(e))
       }
     }
   }
 
-  useEffect(()=> {
-    if(screen !== undefined) {
+  useEffect(() => {
+    if (screen !== undefined) {
       getDisplayMedia();
     }
   }, [screen])
@@ -393,6 +396,96 @@ export default function NexMeetComponent() {
   let handleScreen = () => {
     setScreen(!screen)
   }
+
+
+  const handleScreenShare = async () => {
+    try {
+      // 1. Request the screen media stream
+      const stream = await navigator.mediaDevices.getDisplayMedia({ video: true });
+
+      // 2. Update local video preview to show your shared screen
+      if (localVideoRef.current) {
+        localVideoRef.current.srcObject = stream;
+      }
+
+      // 3. Replace video tracks for all connected WebRTC peers
+      for (let id in connections) {
+        if (id === socketIdRef.current) continue;
+
+        let senders = connections[id].getSenders();
+        let videoSender = senders.find(s => s.track && s.track.kind === "video");
+
+        if (videoSender) {
+          videoSender.replaceTrack(stream.getVideoTracks()[0]);
+        }
+      }
+
+      // 4. Handle when the user clicks "Stop sharing" from the browser banner
+      stream.getVideoTracks()[0].onended = () => {
+        stopScreenShare();
+      };
+
+      setScreen(true);
+
+    } catch (err) {
+      // 💡 Catch permission denials and cancellations cleanly without crashing
+      if (err.name === "NotAllowedError") {
+        console.log("User cancelled screen sharing or denied permission.");
+      } else {
+        console.error("Screen share error:", err);
+      }
+    }
+  };
+
+
+  const stopScreenShare = () => {
+    if (window.localStream && localVideoRef.current) {
+      // Switch local preview back to webcam
+      localVideoRef.current.srcObject = window.localStream;
+
+      // Replace track back to webcam for all connected peers
+      for (let id in connections) {
+        if (id === socketIdRef.current) continue;
+
+        let senders = connections[id].getSenders();
+        let videoSender = senders.find(s => s.track && s.track.kind === "video");
+
+        if (videoSender) {
+          videoSender.replaceTrack(window.localStream.getVideoTracks()[0]);
+        }
+      }
+    }
+    setScreen(false);
+  };
+
+
+  // Function to safely disconnect media tracks, sockets, and leave the meeting
+const handleEndCall = () => {
+  try {
+    // 1. Stop all local camera and microphone tracks
+    if (window.localStream) {
+      window.localStream.getTracks().forEach(track => track.stop());
+    }
+
+    // 2. Close all active WebRTC peer connections
+    for (let id in connections) {
+      if (connections[id]) {
+        connections[id].close();
+      }
+    }
+    connections = {}; // Reset connections object
+
+    // 3. Disconnect socket connection
+    if (socketRef.current) {
+      socketRef.current.disconnect();
+    }
+
+    // 4. Redirect user back to home or lobby
+    window.location.href = "/home"; // Change "/home" to whatever route you want after leaving
+  } catch (err) {
+    console.error("Error ending call:", err);
+  }
+};
 
 
   return (
@@ -421,83 +514,129 @@ export default function NexMeetComponent() {
           </div>
 
           <div style={{
-            width: "100%",
-            marginTop: "10px",
-            background: "#000"
+            position: "fixed",
+            bottom: "20px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            display: "flex",
+            gap: "15px",
+            backgroundColor: "rgba(20, 20, 20, 0.85)",
+            padding: "10px 25px",
+            borderRadius: "30px",
+            backdropFilter: "blur(10px)",
+            alignItems: "center",
+            zIndex: 1000
           }}>
-            <div className={styles.meetVideoContainer}>
+            {/* Video Toggle Button */}
+            <IconButton
+              onClick={handleVideo}
+              style={{
+                color: video ? "#fff" : "#f44336",
+                backgroundColor: "#333",
+                padding: "12px"
+              }}
+            >
+              {video ? <VideocamIcon style={{ fontSize: 28 }} /> : <VideocamOffIcon style={{ fontSize: 28 }} />}
+            </IconButton>
 
-              <div className={styles.buttonContainers}>
+            {/* Audio / Mic Toggle Button */}
+            <IconButton
+              onClick={handleAudio}
+              style={{
+                color: audio ? "#fff" : "#f44336",
+                backgroundColor: "#333",
+                padding: "12px"
+              }}
+            >
+              {audio ? <MicIcon style={{ fontSize: 28 }} /> : <MicOffIcon style={{ fontSize: 28 }} />}
+            </IconButton>
 
-                <IconButton onClick={handleVideo} style={{ color: "white" }}>
-                  {(video === true) ? <VideocamIcon /> : <VideocamOffIcon />}
-                </IconButton>
+            {/* End Call Button */}
+            <IconButton
+              onClick={handleEndCall} // Make sure you have a handleEndCall function defined
+              style={{
+                color: "#fff",
+                backgroundColor: "#d32f2f",
+                padding: "12px"
+              }}
+            >
+              <CallEndIcon style={{ fontSize: 28 }} />
+            </IconButton>
 
-                <IconButton style={{ color: "white" }}>
-                  <CallEndIcon />
-                </IconButton>
-
-                <IconButton onClick={handleAudio} style={{ color: "white" }}>
-                  {audio === true ? <MicIcon /> : <MicOffIcon />}
-                </IconButton>
-
-
-                {screenAvailable === true ?
-                  <IconButton onClick={handleScreen} style={{ color: "white" }}>
-                    {screen === true ? <ScreenShareIcon /> : <StopScreenShareIcon />}
-                  </IconButton> : <></>
-                }
-
-                <Badge badgeContent={newMessages} max={999} color='orange'>
-                  <IconButton style={{ color: "white" }}>
-                    <ChatIcon />
-                  </IconButton>
-                </Badge>
-
-              </div>
-
-              <video
-                className={styles.meetUserVideo}
-                ref={localVideoRef}
-                autoPlay
-                muted
+            {/* Screen Share Button */}
+            {screenAvailable && (
+              <IconButton
+                onClick={handleScreen}
                 style={{
-                  width: "100%",
-                  maxWidth: "1200px",
-                  marginTop: "20px",
-                  height: "auto",
-                  display: "block"
+                  color: screen ? "#4caf50" : "#fff",
+                  backgroundColor: "#333",
+                  padding: "12px"
                 }}
-              />
+              >
+                {screen ? <StopScreenShareIcon style={{ fontSize: 28 }} /> : <ScreenShareIcon style={{ fontSize: 28 }} />}
+              </IconButton>
+            )}
 
-              <div className={styles.conference}>
+            {/* Chat Button with Badge */}
+            <Badge
+              badgeContent={newMessages}
+              max={999}
+              color="primary" // Changed from 'orange' to valid MUI color 'primary'
+            >
+              <IconButton
+                onClick={() => setMessages(!messages)}
+                style={{
+                  color: "#fff",
+                  backgroundColor: "#333",
+                  padding: "12px"
+                }}
+              >
+                <ChatIcon style={{ fontSize: 28 }} />
+              </IconButton>
+            </Badge>
+          </div>
+          <video
+            className={styles.meetUserVideo}
+            ref={localVideoRef}
+            autoPlay
+            muted
+            style={{
+              width: "100%",
+              maxWidth: "1200px",
+              marginTop: "20px",
+              height: "auto",
+              display: "block"
+            }}
+          />
 
-                {videos.map((video) => (
-                  <div className={styles.conferenceView} key={video.socketId}>
-                    <h2>{video.socketId}</h2>
-                    <video
+          <div className={styles.conference}>
 
-                      data-socket={video.socketId}
-                      ref={ref => {
-                        if (ref && video.stream) {
-                          ref.srcObject = video.stream;
-                        }
-                      }}
-                      autoPlay
-                    />
-                  </div>
-                ))}
+            {videos.map((video) => (
+              <div className={styles.conferenceView} key={video.socketId}>
+                <h2>{video.socketId}</h2>
+                <video
 
+                  data-socket={video.socketId}
+                  ref={ref => {
+                    if (ref && video.stream) {
+                      ref.srcObject = video.stream;
+                    }
+                  }}
+                  autoPlay
+                />
               </div>
-            </div>
+            ))}
+
           </div>
         </div>
+
       ) : (
-        <div style={{ color: "white", padding: "20px" }}>
-          <h2>Connected to Call as: {username}</h2>
-        </div>
-      )}
+    <div style={{ color: "white", padding: "20px" }}>
+      <h2>Connected to Call as: {username}</h2>
     </div>
+  )
+}
+    </div >
   );
 }
 
