@@ -400,15 +400,12 @@ export default function NexMeetComponent() {
 
   const handleScreenShare = async () => {
     try {
-      // 1. Request the screen media stream
       const stream = await navigator.mediaDevices.getDisplayMedia({ video: true });
 
-      // 2. Update local video preview to show your shared screen
       if (localVideoRef.current) {
         localVideoRef.current.srcObject = stream;
       }
 
-      // 3. Replace video tracks for all connected WebRTC peers
       for (let id in connections) {
         if (id === socketIdRef.current) continue;
 
@@ -420,7 +417,6 @@ export default function NexMeetComponent() {
         }
       }
 
-      // 4. Handle when the user clicks "Stop sharing" from the browser banner
       stream.getVideoTracks()[0].onended = () => {
         stopScreenShare();
       };
@@ -428,7 +424,6 @@ export default function NexMeetComponent() {
       setScreen(true);
 
     } catch (err) {
-      // 💡 Catch permission denials and cancellations cleanly without crashing
       if (err.name === "NotAllowedError") {
         console.log("User cancelled screen sharing or denied permission.");
       } else {
@@ -440,10 +435,8 @@ export default function NexMeetComponent() {
 
   const stopScreenShare = () => {
     if (window.localStream && localVideoRef.current) {
-      // Switch local preview back to webcam
       localVideoRef.current.srcObject = window.localStream;
 
-      // Replace track back to webcam for all connected peers
       for (let id in connections) {
         if (id === socketIdRef.current) continue;
 
@@ -459,29 +452,24 @@ export default function NexMeetComponent() {
   };
 
 
-  // Function to safely disconnect media tracks, sockets, and leave the meeting
   const handleEndCall = () => {
     try {
-      // 1. Stop all local camera and microphone tracks
       if (window.localStream) {
         window.localStream.getTracks().forEach(track => track.stop());
       }
 
-      // 2. Close all active WebRTC peer connections
       for (let id in connections) {
         if (connections[id]) {
           connections[id].close();
         }
       }
-      connections = {}; // Reset connections object
+      connections = {}; t
 
-      // 3. Disconnect socket connection
       if (socketRef.current) {
         socketRef.current.disconnect();
       }
 
-      // 4. Redirect user back to home or lobby
-      window.location.href = "/home"; // Change "/home" to whatever route you want after leaving
+      window.location.href = "/home";
     } catch (err) {
       console.error("Error ending call:", err);
     }
@@ -653,6 +641,13 @@ export default function NexMeetComponent() {
             ))}
           </div>
 
+          {showModal ? <div className="chatRoom">
+              <h1>Chat</h1>
+            </div> : <></>}
+
+
+
+
           <div style={{
             position: "fixed",
             bottom: "20px",
@@ -697,6 +692,4 @@ export default function NexMeetComponent() {
   );
 
 }
-
-
 
