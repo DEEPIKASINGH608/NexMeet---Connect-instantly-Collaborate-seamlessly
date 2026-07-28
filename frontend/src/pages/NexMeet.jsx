@@ -501,7 +501,6 @@ export default function NexMeetComponent() {
       fontFamily: "'Segoe UI', Roboto, sans-serif"
     }}>
       {askForUsername === true ? (
-        /* --- LOBBY CONTAINER CARD --- */
         <div style={{
           display: "flex",
           flexDirection: "row",
@@ -518,7 +517,6 @@ export default function NexMeetComponent() {
           boxSizing: "border-box"
         }}>
 
-          {/* Left Side: Camera Video Preview */}
           <div style={{
             flex: "1 1 420px",
             maxWidth: "500px",
@@ -539,14 +537,13 @@ export default function NexMeetComponent() {
               playsInline
               style={{
                 width: "100%",
-                height: "100%",
+                height: "auto",
                 objectFit: "cover",
                 display: "block"
               }}
             />
           </div>
 
-          {/* Right Side: Header & Join Form Controls */}
           <div style={{
             flex: "1 1 300px",
             display: "flex",
@@ -634,7 +631,7 @@ export default function NexMeetComponent() {
               playsInline
               style={{
                 width: "100%",
-                height: "100%",
+                height: "auto",
                 objectFit: "cover",
                 borderRadius: "12px",
                 backgroundColor: "#1a1d26"
@@ -700,3 +697,6 @@ export default function NexMeetComponent() {
   );
 
 }
+
+
+
