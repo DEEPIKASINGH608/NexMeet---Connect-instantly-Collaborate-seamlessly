@@ -38,3 +38,17 @@
     border-radius: 10px;
 }
 
+.video-container {
+  width: 100%;
+  height: 400px;
+  overflow: hidden;
+  position: relative;
+}
+
+.video-container video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;   
+}
+
+
