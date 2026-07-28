@@ -489,277 +489,214 @@ export default function NexMeetComponent() {
 
 
   return (
-    <div>
+    <div style={{
+      minHeight: "100vh",
+      width: "100vw",
+      backgroundColor: "#0f1117",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      padding: "20px",
+      boxSizing: "border-box",
+      fontFamily: "'Segoe UI', Roboto, sans-serif"
+    }}>
       {askForUsername === true ? (
-        <div>
-          <h2 style={{ color: "white", fontSize: "2rem", margin: 0 }}> Enter into lobby </h2>
-          <div style={{ display: "flex", gap: "15px", alignItems: "center", width: "100%", marginTop: "15px" }}>
-            <TextField
-              id="outlined-basic"
-              label="Username"
-              value={username}
-              onChange={e => setUsername(e.target.value)}
-              sx={{
-                width: "250px",
-                background: "white",
-                borderRadius: "4px",
-                input: { color: 'black' },
-                '& .MuiInputLabel-root': { color: 'gray' },
-                '& .MuiInputLabel-root.Mui-focused': { color: '#1976d2' },
-              }}
-            />
-            <Button variant="contained" onClick={connect}>
-              Connect
-            </Button>
-          </div>
+        /* --- LOBBY CONTAINER CARD --- */
+        <div style={{
+          display: "flex",
+          flexDirection: "row",
+          flexWrap: "wrap",
+          backgroundColor: "#1a1d26",
+          borderRadius: "16px",
+          padding: "30px",
+          boxShadow: "0 12px 32px rgba(0,0,0,0.6)",
+          gap: "30px",
+          maxWidth: "960px",
+          width: "100%",
+          alignItems: "center",
+          justifyContent: "center",
+          boxSizing: "border-box"
+        }}>
 
-          return (
+          {/* Left Side: Camera Video Preview */}
           <div style={{
-            minHeight: "100vh",
-            backgroundColor: "#0d0e12",
+            flex: "1 1 420px",
+            maxWidth: "500px",
+            width: "100%",
+            position: "relative",
+            borderRadius: "12px",
+            overflow: "hidden",
+            backgroundColor: "#000",
+            aspectRatio: "16/9",
             display: "flex",
             alignItems: "center",
-            justifyContent: "center",
-            padding: "20px",
-            fontFamily: "'Roboto', 'Segoe UI', sans-serif"
+            justifyContent: "center"
           }}>
-            {askForUsername === true ? (
-              /* --- LOBBY CONTAINER --- */
-              <div style={{
-                display: "flex",
-                flexDirection: "row",
-                flexWrap: "wrap",
-                backgroundColor: "#161922",
-                borderRadius: "16px",
-                padding: "30px",
-                boxShadow: "0 10px 30px rgba(0,0,0,0.5)",
-                gap: "30px",
-                maxWidth: "900px",
+            <video
+              ref={localVideoRef}
+              autoPlay
+              muted
+              playsInline
+              style={{
                 width: "100%",
-                alignItems: "center",
-                justifyContent: "center"
-              }}>
-
-                {/* Left Side: Video Preview Box */}
-                <div style={{
-                  flex: "1 1 400px",
-                  position: "relative",
-                  borderRadius: "12px",
-                  overflow: "hidden",
-                  backgroundColor: "#000",
-                  maxHeight: "360px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center"
-                }}>
-                  <video
-                    ref={localVideoRef}
-                    autoPlay
-                    muted
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                      display: "block"
-                    }}
-                  />
-                </div>
-
-                {/* Right Side: Form Controls */}
-                <div style={{
-                  flex: "1 1 300px",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "20px"
-                }}>
-                  <div>
-                    <h2 style={{ color: "#fff", fontSize: "1.8rem", margin: "0 0 8px 0" }}>
-                      Ready to join?
-                    </h2>
-                    <p style={{ color: "#8a8f9d", margin: 0, fontSize: "0.95rem" }}>
-                      Enter your display name to enter the meeting lobby.
-                    </p>
-                  </div>
-
-                  <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
-                    <TextField
-                      id="outlined-basic"
-                      label="Username"
-                      variant="outlined"
-                      value={username}
-                      onChange={e => setUsername(e.target.value)}
-                      sx={{
-                        width: "100%",
-                        background: "#202431",
-                        borderRadius: "8px",
-                        input: { color: "#fff" },
-                        "& .MuiOutlinedInput-root": {
-                          "& fieldset": { borderColor: "transparent" },
-                          "&:hover fieldset": { borderColor: "#1976d2" },
-                          "&.Mui-focused fieldset": { borderColor: "#1976d2" }
-                        },
-                        "& .MuiInputLabel-root": { color: "#8a8f9d" },
-                        "& .MuiInputLabel-root.Mui-focused": { color: "#1976d2" }
-                      }}
-                    />
-
-                    <Button
-                      variant="contained"
-                      onClick={connect}
-                      size="large"
-                      style={{
-                        backgroundColor: "#1976d2",
-                        padding: "12px",
-                        fontSize: "1rem",
-                        fontWeight: "bold",
-                        borderRadius: "8px",
-                        textTransform: "none"
-                      }}
-                    >
-                      Enter Lobby
-                    </Button>
-                  </div>
-                </div>
-              </div>
-
-            ) : (
-
-              /* --- ACTIVE CALL CONTAINER --- */
-              <div style={{
-                position: "relative",
-                width: "100vw",
-                height: "100vh",
-                backgroundColor: "#000",
-                overflow: "hidden"
-              }}>
-                {/* Video Call Grid */}
-                <div className={styles?.meetVideoContainer || "meetVideoContainer"} style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
-                  gap: "15px",
-                  padding: "20px",
-                  height: "calc(100vh - 100px)",
-                  overflowY: "auto"
-                }}>
-                  {/* Main / Local Video */}
-                  <video
-                    ref={localVideoRef}
-                    autoPlay
-                    muted
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                      borderRadius: "12px",
-                      backgroundColor: "#202431"
-                    }}
-                  />
-
-                  {/* Remote Videos Mapping */}
-                  {videos.map((video) => (
-                    <div key={video.socketId} style={{ position: "relative", borderRadius: "12px", overflow: "hidden" }}>
-                      <video
-                        data-socket={video.socketId}
-                        ref={ref => {
-                          if (ref && video.stream) ref.srcObject = video.stream;
-                        }}
-                        autoPlay
-                        style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                      />
-                    </div>
-                  ))}
-                </div>
-
-                {/* Floating Bottom Control Bar */}
-                <div style={{
-                  position: "fixed",
-                  bottom: "20px",
-                  left: "50%",
-                  transform: "translateX(-50%)",
-                  display: "flex",
-                  gap: "15px",
-                  backgroundColor: "rgba(20, 20, 20, 0.85)",
-                  padding: "10px 25px",
-                  borderRadius: "30px",
-                  backdropFilter: "blur(10px)",
-                  alignItems: "center",
-                  zIndex: 1000
-                }}>
-                  <IconButton onClick={handleVideo} style={{ color: video ? "#fff" : "#f44336", backgroundColor: "#333", padding: "12px" }}>
-                    {video ? <VideocamIcon style={{ fontSize: 24 }} /> : <VideocamOffIcon style={{ fontSize: 24 }} />}
-                  </IconButton>
-
-                  <IconButton onClick={handleAudio} style={{ color: audio ? "#fff" : "#f44336", backgroundColor: "#333", padding: "12px" }}>
-                    {audio ? <MicIcon style={{ fontSize: 24 }} /> : <MicOffIcon style={{ fontSize: 24 }} />}
-                  </IconButton>
-
-                  <IconButton onClick={handleEndCall} style={{ color: "#fff", backgroundColor: "#d32f2f", padding: "12px" }}>
-                    <CallEndIcon style={{ fontSize: 24 }} />
-                  </IconButton>
-
-                  {screenAvailable && (
-                    <IconButton onClick={handleScreen} style={{ color: screen ? "#4caf50" : "#fff", backgroundColor: "#333", padding: "12px" }}>
-                      {screen ? <StopScreenShareIcon style={{ fontSize: 24 }} /> : <ScreenShareIcon style={{ fontSize: 24 }} />}
-                    </IconButton>
-                  )}
-
-                  <Badge badgeContent={newMessages} color="primary">
-                    <IconButton onClick={() => setMessages(!messages)} style={{ color: "#fff", backgroundColor: "#333", padding: "12px" }}>
-                      <ChatIcon style={{ fontSize: 24 }} />
-                    </IconButton>
-                  </Badge>
-                </div>
-              </div>
-            )}
+                height: "100%",
+                objectFit: "cover",
+                display: "block"
+              }}
+            />
           </div>
-          );
 
+          {/* Right Side: Header & Join Form Controls */}
+          <div style={{
+            flex: "1 1 300px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "20px",
+            maxWidth: "380px",
+            width: "100%"
+          }}>
+            <div>
+              <h2 style={{ color: "#ffffff", fontSize: "1.8rem", margin: "0 0 8px 0" }}>
+                Enter into lobby
+              </h2>
+              <p style={{ color: "#9ca3af", margin: 0, fontSize: "0.95rem" }}>
+                Set your name and check your video preview before joining.
+              </p>
+            </div>
 
+            <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+              <TextField
+                id="outlined-basic"
+                label="Username"
+                variant="outlined"
+                value={username}
+                onChange={e => setUsername(e.target.value)}
+                sx={{
+                  width: "100%",
+                  background: "#252a37",
+                  borderRadius: "8px",
+                  input: { color: "#ffffff" },
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": { borderColor: "transparent" },
+                    "&:hover fieldset": { borderColor: "#3b82f6" },
+                    "&.Mui-focused fieldset": { borderColor: "#3b82f6" }
+                  },
+                  "& .MuiInputLabel-root": { color: "#9ca3af" },
+                  "& .MuiInputLabel-root.Mui-focused": { color: "#3b82f6" }
+                }}
+              />
 
-          <video
-            className={styles.meetUserVideo}
-            ref={localVideoRef}
-            autoPlay
-            muted
-            style={{
-              width: "100%",
-              maxWidth: "1200px",
-              marginTop: "20px",
-              height: "auto",
-              display: "block"
-            }}
-          />
-
-          <div className={styles.conference}>
-
-            {videos.map((video) => (
-              <div className={styles.conferenceView} key={video.socketId}>
-                <h2>{video.socketId}</h2>
-                <video
-
-                  data-socket={video.socketId}
-                  ref={ref => {
-                    if (ref && video.stream) {
-                      ref.srcObject = video.stream;
-                    }
-                  }}
-                  autoPlay
-                />
-              </div>
-            ))}
-
+              <Button
+                variant="contained"
+                onClick={connect}
+                size="large"
+                style={{
+                  backgroundColor: "#2563eb",
+                  padding: "12px",
+                  fontSize: "1rem",
+                  fontWeight: "600",
+                  borderRadius: "8px",
+                  textTransform: "none"
+                }}
+              >
+                Connect
+              </Button>
+            </div>
           </div>
+
         </div>
 
       ) : (
-        <div style={{ color: "white", padding: "20px" }}>
-          <h2>Connected to Call as: {username}</h2>
+
+        <div style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100vw",
+          height: "100vh",
+          backgroundColor: "#000000",
+          overflow: "hidden",
+          boxSizing: "border-box"
+        }}>
+          <div className={styles?.meetVideoContainer || "meetVideoContainer"} style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+            gap: "16px",
+            padding: "20px",
+            height: "calc(100vh - 100px)",
+            overflowY: "auto",
+            boxSizing: "border-box"
+          }}>
+            <video
+              ref={localVideoRef}
+              autoPlay
+              muted
+              playsInline
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                borderRadius: "12px",
+                backgroundColor: "#1a1d26"
+              }}
+            />
+
+            {videos.map((video) => (
+              <div key={video.socketId} style={{ position: "relative", borderRadius: "12px", overflow: "hidden" }}>
+                <video
+                  data-socket={video.socketId}
+                  ref={ref => {
+                    if (ref && video.stream) ref.srcObject = video.stream;
+                  }}
+                  autoPlay
+                  playsInline
+                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                />
+              </div>
+            ))}
+          </div>
+
+          <div style={{
+            position: "fixed",
+            bottom: "20px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            display: "flex",
+            gap: "15px",
+            backgroundColor: "rgba(20, 20, 20, 0.85)",
+            padding: "10px 25px",
+            borderRadius: "30px",
+            backdropFilter: "blur(10px)",
+            alignItems: "center",
+            zIndex: 1000
+          }}>
+            <IconButton onClick={handleVideo} style={{ color: video ? "#fff" : "#f44336", backgroundColor: "#333", padding: "12px" }}>
+              {video ? <VideocamIcon style={{ fontSize: 24 }} /> : <VideocamOffIcon style={{ fontSize: 24 }} />}
+            </IconButton>
+
+            <IconButton onClick={handleAudio} style={{ color: audio ? "#fff" : "#f44336", backgroundColor: "#333", padding: "12px" }}>
+              {audio ? <MicIcon style={{ fontSize: 24 }} /> : <MicOffIcon style={{ fontSize: 24 }} />}
+            </IconButton>
+
+            <IconButton onClick={handleEndCall} style={{ color: "#fff", backgroundColor: "#d32f2f", padding: "12px" }}>
+              <CallEndIcon style={{ fontSize: 24 }} />
+            </IconButton>
+
+            {screenAvailable && (
+              <IconButton onClick={handleScreen} style={{ color: screen ? "#4caf50" : "#fff", backgroundColor: "#333", padding: "12px" }}>
+                {screen ? <StopScreenShareIcon style={{ fontSize: 24 }} /> : <ScreenShareIcon style={{ fontSize: 24 }} />}
+              </IconButton>
+            )}
+
+            <Badge badgeContent={newMessages} color="primary">
+              <IconButton onClick={() => setMessages(!messages)} style={{ color: "#fff", backgroundColor: "#333", padding: "12px" }}>
+                <ChatIcon style={{ fontSize: 24 }} />
+              </IconButton>
+            </Badge>
+          </div>
         </div>
-      )
-      }
-    </div >
+      )}
+    </div>
   );
+
 }
-
-
-
