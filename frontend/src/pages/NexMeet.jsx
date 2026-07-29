@@ -38,9 +38,9 @@ export default function NexMeetComponent() {
   let [audioAvailable, setAudioAvailable] = useState(true);
   let [video, setVideo] = useState([]);
   let [audio, setAudio] = useState();
-  let [screen, setScreen] = useState(true);
+  let [screen, setScreen] = useState(false);
   let [showModal, setModal] = useState(true);
-  let [screenAvailable, setScreenAvailable] = useState();
+  let [screenAvailable, setScreenAvailable] = useState(false);
   let [messages, setMessages] = useState([]);
   let [message, setMessage] = useState("");
   let [newMessages, setNewMessages] = useState(3);
@@ -320,13 +320,31 @@ export default function NexMeetComponent() {
     getMedia();
   };
 
+  useEffect(() => {
+  if (!askForUsername && localVideoRef.current && window.localStream) {
+    localVideoRef.current.srcObject = window.localStream;
+  }
+}, [askForUsername]);
+
 
   let handleVideo = () => {
-    setVideo(!video);
+    if (window.localStream) {
+      const videoTrack = window.localStream.getVideoTracks()[0];
+      if (videoTrack) {
+        videoTrack.enabled = !videoTrack.enabled;
+        setVideo(videoTrack.enabled);
+      }
+    }
   }
 
   let handleAudio = () => {
-    setAudio(!audio)
+    if (window.localStream) {
+      const audioTrack = window.localStream.getAudioTracks()[0];
+      if (audioTrack) {
+        audioTrack.enabled = !audioTrack.enabled;
+        setAudio(audioTrack.enabled);
+      }
+    }
   }
 
   let getDisplayMediaSuccess = (stream) => {
@@ -399,36 +417,33 @@ export default function NexMeetComponent() {
 
 
   const handleScreenShare = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getDisplayMedia({ video: true });
+    if (!screen) {
+      try {
+        const stream = await navigator.mediaDevices.getDisplayMedia({ video: true });
 
-      if (localVideoRef.current) {
-        localVideoRef.current.srcObject = stream;
-      }
-
-      for (let id in connections) {
-        if (id === socketIdRef.current) continue;
-
-        let senders = connections[id].getSenders();
-        let videoSender = senders.find(s => s.track && s.track.kind === "video");
-
-        if (videoSender) {
-          videoSender.replaceTrack(stream.getVideoTracks()[0]);
+        if (localVideoRef.current) {
+          localVideoRef.current.srcObject = stream;
         }
+
+        for (let id in connections) {
+          if (id === socketIdRef.current) continue;
+          let senders = connections[id].getSenders();
+          let videoSender = senders.find(s => s.track && s.track.kind === "video");
+          if (videoSender) {
+            videoSender.replaceTrack(stream.getVideoTracks()[0]);
+          }
+        }
+
+        stream.getVideoTracks()[0].onended = () => {
+          stopScreenShare();
+        };
+
+        setScreen(true);
+      } catch (err) {
+        console.log("Screen share cancelled or failed:", err);
       }
-
-      stream.getVideoTracks()[0].onended = () => {
-        stopScreenShare();
-      };
-
-      setScreen(true);
-
-    } catch (err) {
-      if (err.name === "NotAllowedError") {
-        console.log("User cancelled screen sharing or denied permission.");
-      } else {
-        console.error("Screen share error:", err);
-      }
+    } else {
+      stopScreenShare();
     }
   };
 
@@ -463,7 +478,7 @@ export default function NexMeetComponent() {
           connections[id].close();
         }
       }
-      connections = {}; t
+      connections = {};
 
       if (socketRef.current) {
         socketRef.current.disconnect();
@@ -675,7 +690,7 @@ export default function NexMeetComponent() {
             </IconButton>
 
             {screenAvailable && (
-              <IconButton onClick={handleScreen} style={{ color: screen ? "#4caf50" : "#fff", backgroundColor: "#333", padding: "12px" }}>
+              <IconButton onClick={handleScreenShareToggle} style={{ color: screen ? "#4caf50" : "#fff", backgroundColor: "#333", padding: "12px" }}>
                 {screen ? <StopScreenShareIcon style={{ fontSize: 24 }} /> : <ScreenShareIcon style={{ fontSize: 24 }} />}
               </IconButton>
             )}

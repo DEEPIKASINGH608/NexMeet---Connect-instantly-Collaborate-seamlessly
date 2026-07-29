@@ -39,6 +39,8 @@
 }
 
 .chatRoom {
+    position: absolute;
+    height: 30vh;
     
 }
 
