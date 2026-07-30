@@ -52,7 +52,7 @@ export default function NexMeetComponent() {
         video: {
           width: { ideal: 1280 },
           height: { ideal: 720 },
-          aspectRatio: { ideal: 1.7777777778 } // 16:9 ratio
+          aspectRatio: { ideal: 1.7777777778 } 
         },
         audio: true
       });
@@ -81,7 +81,6 @@ export default function NexMeetComponent() {
     getPermissions();
   }, []);
 
-  // Re-attach video stream when transitioning from Lobby to In-Call view
   useEffect(() => {
     if (!askForUsername && localVideoRef.current && window.localStream) {
       localVideoRef.current.srcObject = window.localStream;
