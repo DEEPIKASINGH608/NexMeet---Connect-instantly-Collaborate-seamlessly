@@ -8,9 +8,9 @@
     position: absolute;
     bottom: 10vh;
     height: 20vh;
-    width: auto;
-    right: 0;
-    left: 0;
+    width: fit-content;
+    left: 50%;
+    transform: translateX(-50%);
     border-radius: 20px;
 }
 
@@ -40,8 +40,12 @@
 
 .chatRoom {
     position: absolute;
-    height: 30vh;
-    
+    height: 70vh;
+    right: 0;
+    background: white;
+    border-radius: 10px;
+    width: 30vw;
+    bottom: 10vh;
 }
 
 
