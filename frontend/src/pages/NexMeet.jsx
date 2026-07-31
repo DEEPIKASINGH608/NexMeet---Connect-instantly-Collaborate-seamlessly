@@ -52,7 +52,7 @@ export default function NexMeetComponent() {
         video: {
           width: { ideal: 1280 },
           height: { ideal: 720 },
-          aspectRatio: { ideal: 1.7777777778 } 
+          aspectRatio: { ideal: 1.7777777778 }
         },
         audio: true
       });
@@ -502,4 +502,6 @@ export default function NexMeetComponent() {
     </div>
   );
 }
+
+
 
