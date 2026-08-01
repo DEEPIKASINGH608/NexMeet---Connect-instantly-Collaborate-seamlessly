@@ -497,7 +497,8 @@ export default function NexMeetComponent() {
               </IconButton>
             </Badge>
           </div>
-        </div>
+
+          <video className={styles.meetUserVideo} ref={localVideoRef} autoPlay playsInline muted></video></div>
       )}
     </div>
   );
