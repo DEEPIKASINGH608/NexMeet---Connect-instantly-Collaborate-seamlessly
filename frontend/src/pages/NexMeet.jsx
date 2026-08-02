@@ -453,55 +453,62 @@ export default function NexMeetComponent() {
             ))}
           </div>
 
-          {showModal && (
-            <div className="chatRoom">
-              <h1>Chat</h1>
+          <div className={styles.meetVideoContainer}>
+
+            {showModal ? <div className={styles.chatRoom}>
+              <div className={styles.chatContainer}>
+                <h1>Chat</h1>
+
+                <div className={style.chattingArea}>
+                  <TextField id="outlined-basic" label="Out"></>
+                </div>
+
+              </div>
+            </div> : <></>}
+
+            <div style={{
+              position: "fixed",
+              bottom: "20px",
+              left: "50%",
+              transform: "translateX(-50%)",
+              display: "flex",
+              gap: "15px",
+              backgroundColor: "rgba(20, 20, 20, 0.85)",
+              padding: "10px 25px",
+              borderRadius: "30px",
+              backdropFilter: "blur(10px)",
+              alignItems: "center",
+              zIndex: 1000
+            }}>
+              <IconButton onClick={handleVideo} style={{ color: video ? "#fff" : "#f44336", backgroundColor: "#333", padding: "12px" }}>
+                {video ? <VideocamIcon style={{ fontSize: 24 }} /> : <VideocamOffIcon style={{ fontSize: 24 }} />}
+              </IconButton>
+
+              <IconButton onClick={handleAudio} style={{ color: audio ? "#fff" : "#f44336", backgroundColor: "#333", padding: "12px" }}>
+                {audio ? <MicIcon style={{ fontSize: 24 }} /> : <MicOffIcon style={{ fontSize: 24 }} />}
+              </IconButton>
+
+              <IconButton onClick={handleEndCall} style={{ color: "#fff", backgroundColor: "#d32f2f", padding: "12px" }}>
+                <CallEndIcon style={{ fontSize: 24 }} />
+              </IconButton>
+
+              {screenAvailable && (
+                <IconButton onClick={handleScreenShare} style={{ color: screen ? "#4caf50" : "#fff", backgroundColor: "#333", padding: "12px" }}>
+                  {screen ? <StopScreenShareIcon style={{ fontSize: 24 }} /> : <ScreenShareIcon style={{ fontSize: 24 }} />}
+                </IconButton>
+              )}
+
+              <Badge badgeContent={newMessages} color="primary">
+                <IconButton onClick={() => setModal(!showModal)} style={{ color: "#fff", backgroundColor: "#333", padding: "12px" }}>
+                  <ChatIcon style={{ fontSize: 24 }} />
+                </IconButton>
+              </Badge>
             </div>
-          )}
 
-          <div style={{
-            position: "fixed",
-            bottom: "20px",
-            left: "50%",
-            transform: "translateX(-50%)",
-            display: "flex",
-            gap: "15px",
-            backgroundColor: "rgba(20, 20, 20, 0.85)",
-            padding: "10px 25px",
-            borderRadius: "30px",
-            backdropFilter: "blur(10px)",
-            alignItems: "center",
-            zIndex: 1000
-          }}>
-            <IconButton onClick={handleVideo} style={{ color: video ? "#fff" : "#f44336", backgroundColor: "#333", padding: "12px" }}>
-              {video ? <VideocamIcon style={{ fontSize: 24 }} /> : <VideocamOffIcon style={{ fontSize: 24 }} />}
-            </IconButton>
-
-            <IconButton onClick={handleAudio} style={{ color: audio ? "#fff" : "#f44336", backgroundColor: "#333", padding: "12px" }}>
-              {audio ? <MicIcon style={{ fontSize: 24 }} /> : <MicOffIcon style={{ fontSize: 24 }} />}
-            </IconButton>
-
-            <IconButton onClick={handleEndCall} style={{ color: "#fff", backgroundColor: "#d32f2f", padding: "12px" }}>
-              <CallEndIcon style={{ fontSize: 24 }} />
-            </IconButton>
-
-            {screenAvailable && (
-              <IconButton onClick={handleScreenShare} style={{ color: screen ? "#4caf50" : "#fff", backgroundColor: "#333", padding: "12px" }}>
-                {screen ? <StopScreenShareIcon style={{ fontSize: 24 }} /> : <ScreenShareIcon style={{ fontSize: 24 }} />}
-              </IconButton>
-            )}
-
-            <Badge badgeContent={newMessages} color="primary">
-              <IconButton onClick={() => setModal(!showModal)} style={{ color: "#fff", backgroundColor: "#333", padding: "12px" }}>
-                <ChatIcon style={{ fontSize: 24 }} />
-              </IconButton>
-            </Badge>
-          </div>
-
-          <video className={styles.meetUserVideo} ref={localVideoRef} autoPlay playsInline muted></video></div>
+            <video className={styles.meetUserVideo} ref={localVideoRef} autoPlay playsInline muted></video></div>
       )}
-    </div>
-  );
+        </div>
+      );
 }
 
 
