@@ -459,8 +459,8 @@ export default function NexMeetComponent() {
               <div className={styles.chatContainer}>
                 <h1>Chat</h1>
 
-                <div className={style.chattingArea}>
-                  <TextField id="outlined-basic" label="Out"></>
+                <div className={styles.chatt}>
+                  <TextField id="outlined-basic" label="Out" />
                 </div>
 
               </div>
@@ -505,11 +505,12 @@ export default function NexMeetComponent() {
               </Badge>
             </div>
 
-            <video className={styles.meetUserVideo} ref={localVideoRef} autoPlay playsInline muted></video></div>
-      )}
+            <video className={styles.meetUserVideo} ref={localVideoRef} autoPlay playsInline muted></video>
+          </div>
         </div>
-      );
+      )}
+    </div>
+  );
 }
-
 
 
