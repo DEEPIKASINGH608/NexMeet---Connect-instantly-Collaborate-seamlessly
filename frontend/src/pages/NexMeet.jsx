@@ -37,11 +37,11 @@ export default function NexMeetComponent() {
   let [video, setVideo] = useState(true);
   let [audio, setAudio] = useState(true);
   let [screen, setScreen] = useState(false);
-  let [showModal, setModal] = useState(false);
+  let [showModal, setModal] = useState(true);
   let [screenAvailable, setScreenAvailable] = useState(false);
   let [messages, setMessages] = useState([]);
   let [message, setMessage] = useState("");
-  let [newMessages, setNewMessages] = useState(3);
+  let [newMessages, setNewMessages] = useState(0);
   let [askForUsername, setAskForUsername] = useState(true);
   let [username, setUsername] = useState("");
   let [videos, setVideos] = useState([]);
@@ -111,7 +111,15 @@ export default function NexMeetComponent() {
     }
   };
 
-  let addMessage = () => { };
+  let addMessage = (data, sender, socketIdSender) => {
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      { sender: sender, data: data }
+    ]);
+    if (socketIdSender !== socketIdRef.current) {
+      setNewMessages((prevCount) => prevCount + 1);
+    }
+  };
 
   let connectToSocketServer = () => {
     socketRef.current = io.connect(server_url, { secure: false });
@@ -292,11 +300,21 @@ export default function NexMeetComponent() {
     }
   };
 
+  let sendMessage = () => {
+    if (message.trim() !== "") {
+      socketRef.current.emit("chat-message", message, username);
+      setMessage("");
+    }
+  };
+
+
+
+
   return (
     <div style={{
       minHeight: "100vh",
       width: "100vw",
-      backgroundColor: "#0f1117",
+      backgroundColor: "#030826",
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
@@ -411,106 +429,115 @@ export default function NexMeetComponent() {
           left: 0,
           width: "100vw",
           height: "100vh",
-          backgroundColor: "#000000",
+          backgroundColor: "#030826",
           overflow: "hidden",
           boxSizing: "border-box"
         }}>
-          <div className={styles?.meetVideoContainer || "meetVideoContainer"} style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
-            gap: "16px",
-            padding: "20px",
-            height: "calc(100vh - 100px)",
-            overflowY: "hidden",
-            boxSizing: "border-box"
-          }}>
-            <video
-              ref={localVideoRef}
-              autoPlay
-              muted
-              playsInline
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "contain",
-                borderRadius: "12px",
-                backgroundColor: "#1a1d26"
-              }}
-            />
-
-            {videos.map((vid) => (
-              <div key={vid.socketId} style={{ position: "relative", borderRadius: "12px", overflow: "hidden" }}>
-                <video
-                  data-socket={vid.socketId}
-                  ref={ref => {
-                    if (ref && vid.stream) ref.srcObject = vid.stream;
-                  }}
-                  autoPlay
-                  playsInline
-                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                />
-              </div>
-            ))}
-          </div>
-
-          <div className={styles.meetVideoContainer}>
-
-            {showModal ? <div className={styles.chatRoom}>
-              <div className={styles.chatContainer}>
-                <h1>Chat</h1>
-
-                <div className={styles.chatt}>
-                  <TextField id="outlined-basic" label="Out" />
+          <div className={styles.mainLayout}>
+            <div className={styles.meetVideoContainer}>
+              {videos.map((vid) => (
+                <div key={vid.socketId} className={styles.remoteVideoCard}>
+                  <video
+                    data-socket={vid.socketId}
+                    ref={ref => {
+                      if (ref && vid.stream) ref.srcObject = vid.stream;
+                    }}
+                    autoPlay
+                    playsInline
+                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                  />
                 </div>
-
-              </div>
-            </div> : <></>}
-
-            <div style={{
-              position: "fixed",
-              bottom: "20px",
-              left: "50%",
-              transform: "translateX(-50%)",
-              display: "flex",
-              gap: "15px",
-              backgroundColor: "rgba(20, 20, 20, 0.85)",
-              padding: "10px 25px",
-              borderRadius: "30px",
-              backdropFilter: "blur(10px)",
-              alignItems: "center",
-              zIndex: 1000
-            }}>
-              <IconButton onClick={handleVideo} style={{ color: video ? "#fff" : "#f44336", backgroundColor: "#333", padding: "12px" }}>
-                {video ? <VideocamIcon style={{ fontSize: 24 }} /> : <VideocamOffIcon style={{ fontSize: 24 }} />}
-              </IconButton>
-
-              <IconButton onClick={handleAudio} style={{ color: audio ? "#fff" : "#f44336", backgroundColor: "#333", padding: "12px" }}>
-                {audio ? <MicIcon style={{ fontSize: 24 }} /> : <MicOffIcon style={{ fontSize: 24 }} />}
-              </IconButton>
-
-              <IconButton onClick={handleEndCall} style={{ color: "#fff", backgroundColor: "#d32f2f", padding: "12px" }}>
-                <CallEndIcon style={{ fontSize: 24 }} />
-              </IconButton>
-
-              {screenAvailable && (
-                <IconButton onClick={handleScreenShare} style={{ color: screen ? "#4caf50" : "#fff", backgroundColor: "#333", padding: "12px" }}>
-                  {screen ? <StopScreenShareIcon style={{ fontSize: 24 }} /> : <ScreenShareIcon style={{ fontSize: 24 }} />}
-                </IconButton>
-              )}
-
-              <Badge badgeContent={newMessages} color="primary">
-                <IconButton onClick={() => setModal(!showModal)} style={{ color: "#fff", backgroundColor: "#333", padding: "12px" }}>
-                  <ChatIcon style={{ fontSize: 24 }} />
-                </IconButton>
-              </Badge>
+              ))}
             </div>
 
-            <video className={styles.meetUserVideo} ref={localVideoRef} autoPlay playsInline muted></video>
+            <video
+              className={styles.meetUserVideo}
+              ref={localVideoRef}
+              autoPlay
+              playsInline
+              muted
+            />
+
+            {showModal && (
+              <div className={styles.chatRoom}>
+                <div className={styles.chatContainer}>
+                  <h1 style={{ color: "#000", margin: "0 0 24px 0", fontSize: "2rem", fontWeight: "bold" }}>
+                    Chat
+                   </h1>
+
+                  <div className={styles.messagesContainer}>
+                    {messages.map((item, index) => (
+                      <div key={index} style={{ marginBottom: "10px", color: "#333" }}>
+                        <b style={{ color: "#000" }}>{item.sender}: </b>
+                        <span>{item.data}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className={styles.chatt}>
+                    <TextField
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
+                      onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+                      id="outlined-basic"
+                      label="Outlined"
+                      variant="outlined"
+                      fullWidth
+                    />
+                    <Button
+                      variant='contained'
+                      onClick={sendMessage}
+                      style={{ marginTop: "12px", display: "none" }}
+                    >
+                      Send
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div style={{
+            position: "fixed",
+            bottom: "20px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            display: "flex",
+            gap: "15px",
+            backgroundColor: "rgba(20, 20, 20, 0.85)",
+            padding: "10px 25px",
+            borderRadius: "30px",
+            backdropFilter: "blur(10px)",
+            alignItems: "center",
+            zIndex: 1000
+          }}>
+            <IconButton onClick={handleVideo} style={{ color: video ? "#fff" : "#f44336", backgroundColor: "#333", padding: "12px" }}>
+              {video ? <VideocamIcon style={{ fontSize: 24 }} /> : <VideocamOffIcon style={{ fontSize: 24 }} />}
+            </IconButton>
+
+            <IconButton onClick={handleAudio} style={{ color: audio ? "#fff" : "#f44336", backgroundColor: "#333", padding: "12px" }}>
+              {audio ? <MicIcon style={{ fontSize: 24 }} /> : <MicOffIcon style={{ fontSize: 24 }} />}
+            </IconButton>
+
+            <IconButton onClick={handleEndCall} style={{ color: "#fff", backgroundColor: "#d32f2f", padding: "12px" }}>
+              <CallEndIcon style={{ fontSize: 24 }} />
+            </IconButton>
+
+            {screenAvailable && (
+              <IconButton onClick={handleScreenShare} style={{ color: screen ? "#4caf50" : "#fff", backgroundColor: "#333", padding: "12px" }}>
+                {screen ? <StopScreenShareIcon style={{ fontSize: 24 }} /> : <ScreenShareIcon style={{ fontSize: 24 }} />}
+              </IconButton>
+            )}
+
+            <Badge badgeContent={newMessages} color="primary">
+              <IconButton onClick={() => setModal(!showModal)} style={{ color: "#fff", backgroundColor: "#333", padding: "12px" }}>
+                <ChatIcon style={{ fontSize: 24 }} />
+              </IconButton>
+            </Badge>
           </div>
         </div>
       )}
     </div>
   );
 }
-
 
