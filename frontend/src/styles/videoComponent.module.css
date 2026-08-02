@@ -1,14 +1,12 @@
-/* Main parent container */
 .meetVideoContainer {
   position: relative;
   width: 100vw;
   height: 100vh;
-  background: #03073d; /* Dark navy background matching Image 2 */
+  background: #03073d;
   overflow: hidden;
   box-sizing: border-box;
 }
 
-/* Remote videos container placed at the top-left (Image 2) */
 .conferenceView {
   position: absolute;
   top: 30px;
@@ -28,7 +26,6 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
-/* FIX: Local user video pinned to the bottom-left corner (Image 2) */
 .meetUserVideo {
   position: absolute;
   bottom: 25px;
@@ -36,12 +33,11 @@
   width: 250px;
   height: 150px;
   object-fit: cover;
-  border-radius: 20px; /* Rounded corners matching Image 2 */
+  border-radius: 20px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
   z-index: 20;
 }
 
-/* FIX: White chat room drawer docked to the right side (Image 2) */
 .chatRoom {
   position: absolute;
   top: 2.5vh;
@@ -74,7 +70,6 @@
   gap: 10px;
 }
 
-/* FIX: Floating controls toolbar centered horizontally at the bottom */
 .buttonContainers {
   position: absolute;
   bottom: 20px;
@@ -92,5 +87,7 @@
 }
 
 .buttonContainers > button {
-  font-size: 24px; /* Scaled down from 90px to prevent control overlap */
+  font-size: 24px;
 }
+
+
