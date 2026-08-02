@@ -1,61 +1,96 @@
+/* Main parent container */
 .meetVideoContainer {
-    position: relative;
-    height: 100vh;
-    background: rgb(3, 7, 61);
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  background: #03073d; /* Dark navy background matching Image 2 */
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
-.meetUserVideo {
-    position: absolute;
-    bottom: 10vh;
-    height: 20vh;
-    width: fit-content;
-    left: 50%;
-    transform: translateX(-50%);
-    border-radius: 20px;
-}
-
-.buttonContainers {
-    position: absolute;
-    width: 100vw;
-    bottom: 0;
-    text-align: center;
-}
-
-.buttonContainers > button {
-    font-size: 90px;
-}
-
+/* Remote videos container placed at the top-left (Image 2) */
 .conferenceView {
-    display: flex;
-    padding: 10px;
-    gap: 10px;
-
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  z-index: 10;
 }
 
 .conferenceView > video {
-    width: 40vw;
-    min-width: 30vw;
-    border-radius: 10px;
+  width: 280px;
+  height: 170px;
+  object-fit: cover;
+  border-radius: 12px;
+  background-color: #000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
+/* FIX: Local user video pinned to the bottom-left corner (Image 2) */
+.meetUserVideo {
+  position: absolute;
+  bottom: 25px;
+  left: 25px;
+  width: 250px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 20px; /* Rounded corners matching Image 2 */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+  z-index: 20;
+}
+
+/* FIX: White chat room drawer docked to the right side (Image 2) */
 .chatRoom {
-    position: absolute;
-    height: 90vh;
-    right: 0;
-    background: white;
-    border-radius: 10px;
-    width: 30vw;
-    padding-inline: 20px;
+  position: absolute;
+  top: 2.5vh;
+  right: 20px;
+  height: 95vh;
+  width: 380px;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.3);
+  z-index: 100;
+  box-sizing: border-box;
 }
 
 .chatContainer {
-    position: relative;
-    height: 100%;
-
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-sizing: border-box;
 }
 
 .chattingArea {
-    position: absolute;
-    bottom: 0;
-    
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* FIX: Floating controls toolbar centered horizontally at the bottom */
+.buttonContainers {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: rgba(20, 20, 20, 0.85);
+  padding: 8px 20px;
+  border-radius: 30px;
+  backdrop-filter: blur(8px);
+  z-index: 50;
+}
+
+.buttonContainers > button {
+  font-size: 24px; /* Scaled down from 90px to prevent control overlap */
 }
