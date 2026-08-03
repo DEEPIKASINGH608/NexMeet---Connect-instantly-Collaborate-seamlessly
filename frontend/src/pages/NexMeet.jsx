@@ -465,7 +465,20 @@ export default function NexMeetComponent() {
                     Chat
                    </h1>
 
-                   <div className={styles.chattingDisplay}></div>
+                   <div className={styles.chattingDisplay}>
+
+                    {messages.length > 0 ? messages.map((item, index) => {
+                      return (
+                        <div style={{marginBottom: "20px"}} key={index}>
+                          <p style={{fontWeight: "bold"}}>{item.sender}</p>
+                          <p>{item.data}</p>
+                        </div>
+                      )
+                    }) : <p>No Messages Yet</p>
+                  }
+
+
+                   </div>
 
 
 
