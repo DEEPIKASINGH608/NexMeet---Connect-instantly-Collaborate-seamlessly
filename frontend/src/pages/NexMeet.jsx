@@ -465,6 +465,10 @@ export default function NexMeetComponent() {
                     Chat
                    </h1>
 
+                   <div className={styles.chattingDisplay}></div>
+
+
+
                   <div className={styles.messagesContainer}>
                     {messages.map((item, index) => (
                       <div key={index} style={{ marginBottom: "10px", color: "#333" }}>
@@ -487,7 +491,7 @@ export default function NexMeetComponent() {
                     <Button
                       variant='contained'
                       onClick={sendMessage}
-                      style={{ marginTop: "12px", display: "none" }}
+                      style={{ marginTop: "12px" }}
                     >
                       Send
                     </Button>
