@@ -310,17 +310,6 @@ export default function NexMeetComponent() {
     }
   };
 
-  let handleEndCall = () => {
-    try {
-      let tracks = localVideoRef.current.srcObject.getTracks();
-      tracks.forEach(track => track.stop())
-    } catch (e) {}
-
-    routeTo("/home")
-
-  }
-
-
   return (
     <div style={{
       minHeight: "100vh",
