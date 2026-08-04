@@ -205,8 +205,11 @@ export default function NexMeetComponent() {
     setAskForUsername(false);
     setVideo(videoAvailable);
     setAudio(audioAvailable);
+
     connectToSocketServer();
   };
+
+  let routeTo = useNavigate();
 
   let handleVideo = () => {
     if (window.localStream) {
@@ -307,7 +310,15 @@ export default function NexMeetComponent() {
     }
   };
 
+  let handleEndCall = () => {
+    try {
+      let tracks = localVideoRef.current.srcObject.getTracks();
+      tracks.forEach(track => track.stop())
+    } catch (e) {}
 
+    routeTo("/home")
+
+  }
 
 
   return (
