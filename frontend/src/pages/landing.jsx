@@ -87,6 +87,3 @@ export default function LandingPage() {
   );
 }
 
-
-
-
