@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 import withAuth from '../utils/withAuth';
 
 function HomeComponent() {
 
-    let navigate = useNavigator();
+    let navigate = useNavigate();
         const [meetingCode, setMeetingCode] = useState("");
         let handleJoinVideoCall = async () => {
             navigate(`/${meetinCode}`)
