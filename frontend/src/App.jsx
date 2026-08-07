@@ -5,6 +5,8 @@ import LandingPage from './pages/landing';
 import { AuthProvider } from './contexts/AuthContext';
 import Authentication from './pages/authentication';
 import NexMeetComponent from './pages/NexMeet';
+import HomeComponent from './pages/home';
+
 
 function App() {
 
@@ -19,7 +21,7 @@ function App() {
           <Route path='/' element={<LandingPage />} />
 
           <Route path='/auth' element={<Authentication />} />
-          
+
           <Route path='/home' element={<HomeComponent />} />
 
           <Route path='/:url' element={<NexMeetComponent />} />
