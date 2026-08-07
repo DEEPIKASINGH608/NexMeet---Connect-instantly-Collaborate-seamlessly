@@ -61,7 +61,7 @@ export default function AuthForm() {
             <Grid container component="main" sx={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center', bgcolor: '#0f172a' }}>
                 <CssBaseline />
 
-                <Grid item xs={11} sm={7} md={4}>
+                <Grid xs={11} sm={7} md={4}>
                     <Paper
                         elevation={12}
                         sx={{
