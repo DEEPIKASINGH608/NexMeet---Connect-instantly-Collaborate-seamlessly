@@ -5,4 +5,4 @@ function HomeComponent() {
     )
 }
 
-export default withAuth(H)
+export default withAuth(HomeComponent)
