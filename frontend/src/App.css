@@ -1,5 +1,5 @@
 * {
-  box-sizing: border-box; 
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
@@ -86,4 +86,13 @@
   height: auto;
   border-radius: 8px;
 }
+
+.navBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-right: 20px;
+  text-align: center;
+}
+
 
