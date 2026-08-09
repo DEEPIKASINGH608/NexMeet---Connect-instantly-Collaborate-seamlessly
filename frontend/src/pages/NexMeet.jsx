@@ -209,7 +209,7 @@ export default function NexMeetComponent() {
     connectToSocketServer();
   };
 
-  
+
 
   let routeTo = useNavigate();
 
@@ -559,3 +559,4 @@ export default function NexMeetComponent() {
     </div>
   );
 }
+
