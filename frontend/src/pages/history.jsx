@@ -31,6 +31,15 @@ export default function History() {
         fetchHistory();
     }, [])
 
+    let formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const day = date.getDate().toString().padStart(2, "0");
+        const month = (date.getMonth() + 1).toString().padStart(2, "0")
+        const year = date.getFullYear();
+
+        return `${day}/{month}/${year}`
+    }
+
     return (
         <div>
             <IconButton onClick={() => {
@@ -41,18 +50,14 @@ export default function History() {
             {meetings.map((e, i) => {
                 return (
                     <>
-
-
-
-
                         <Card key={e._id || i} variant="outlined" sx={{ mb: 2 }}>
 
                             <CardContent>
                                 <Typography sx={{ fontsize: 14 }} color="text.secondary" gutterButtom>
-                                    Word of the day
+                                    Code: {e.meetingCode}
                                 </Typography>
                                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                    adjective
+                                    Date: {formatDate(e.date)}
                                 </Typography>
                             </CardContent>
                         </Card>
