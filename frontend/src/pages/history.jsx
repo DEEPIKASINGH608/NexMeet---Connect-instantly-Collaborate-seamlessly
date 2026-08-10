@@ -33,17 +33,19 @@ export default function History() {
 
     return (
         <div>
-
-            {meetings.map((e, index) => {
+            <IconButton onClick={() => {
+                routeTo("/home")
+            }}>
+                <HomeIcon />
+            </IconButton>
+            {meetings.map((e, i) => {
                 return (
                     <>
-                        <IconButton onClick={() => {
-                            routeTo("/home")
-                        }}>
-                            <HomeIcon />
 
-                        </IconButton>
-                        <Card key={e._id || index} variant="outlined" sx={{ mb: 2 }}>
+
+
+
+                        <Card key={e._id || i} variant="outlined" sx={{ mb: 2 }}>
 
                             <CardContent>
                                 <Typography sx={{ fontsize: 14 }} color="text.secondary" gutterButtom>
@@ -51,11 +53,6 @@ export default function History() {
                                 </Typography>
                                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
                                     adjective
-                                </Typography>
-                                <Typography variant="body2">
-                                    well meaning and kindly
-                                    <br />
-                                    {'"a benevolent smile"'}
                                 </Typography>
                             </CardContent>
                         </Card>
