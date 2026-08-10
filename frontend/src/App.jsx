@@ -24,6 +24,8 @@ function App() {
 
           <Route path='/home' element={<HomeComponent />} />
 
+          <Route path='/history' element={ <History />} />
+
           <Route path='/:url' element={<NexMeetComponent />} />
 
         </Routes>

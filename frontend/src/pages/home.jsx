@@ -1,17 +1,22 @@
-import React, { useState } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
+import { AuthContext } from '../contexts/AuthContext'
 import { useNavigate } from 'react-router-dom';
+import Card from '@mui/material';
+import CardContent from '@mui/material';
+import Box from '@mui/material';
+import CardActions from '@mui/material';
+import Typography from '@mui/material';
 import withAuth from '../utils/withAuth';
 import "../App.css";
-import { IconButton } from '@mui/material';
-import RestoreIcon from '@mui/icons-material/'
-
+import { IconButton, Button } from '@mui/material';
+import { Restore as RestoreIcon, Videocam as VideocamIcon } from '@mui/icons-material';
 
 function HomeComponent() {
 
     let navigate = useNavigate();
         const [meetingCode, setMeetingCode] = useState("");
         let handleJoinVideoCall = async () => {
-            navigate(`/${meetinCode}`)
+            navigate(`/${meetingCode}`);
         }
 
     return (
@@ -23,7 +28,11 @@ function HomeComponent() {
             </div>
 
             <div style={{display: "flex", alignItems: "center"}}>
-                <IconButton>
+                <IconButton onClick={
+                    () => {
+                        navigate("/history")
+                    }
+                }>
                     <RestoreIcon />
                     <p> History</p>
                 </IconButton>
