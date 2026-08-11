@@ -16,9 +16,10 @@ const corporateBlueTheme = createTheme({
   },
 });
 
-const router = useNavigate();
+
 
 export default function LandingPage() {
+  const router = useNavigate();
   return (
     <ThemeProvider theme={corporateBlueTheme}>
       <CssBaseline />
@@ -31,16 +32,19 @@ export default function LandingPage() {
 
           <div className='navlist' style={{ display: 'flex', alignItems: 'center', gap: '2.5rem', fontSize: '1.1rem', fontWeight: '500' }}>
             <p onClick={() => {
-              router("/ffd")
-            }} style={{ cursor: 'pointer', margin: 0, color: '#94a3b8', fontFamily: 'sans-serif', transition: 'color 0.2s' }}>Join as Guest</p>
+              router("/auth")
+            }} style={{ cursor: 'pointer', margin: 0, color: '#94a3b8', fontFamily: 'sans-serif', transition: 'color 0.2s' }}>
+              Join as Guest
+            </p>
 
-            <Link to="/auth" state={{ defaultForm: 1 }} style={{ textDecoration: 'none', color: '#94a3b8', fontFamily: 'sans-serif' }}>
+            <Link
+            to="/auth"
+            state={{ defaultForm: 1 }}
+            style={{ textDecoration: 'none', color: '#94a3b8', fontFamily: 'sans-serif' }}
+            >
               Register
             </Link>
 
-            <div onClick={(
-              router("/auth")
-            )} role='button'></div>
 
             <Link to="/auth" state={{ defaultForm: 0 }} style={{
               textDecoration: 'none',
