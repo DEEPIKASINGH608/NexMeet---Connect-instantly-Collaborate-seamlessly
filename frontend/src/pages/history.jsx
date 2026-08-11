@@ -47,24 +47,28 @@ export default function History() {
             }}>
                 <HomeIcon />
             </IconButton>
-            {meetings.map((e, i) => {
-                return (
-                    <>
-                        <Card key={e._id || i} variant="outlined" sx={{ mb: 2 }}>
+            {
+                {
+                    (meetings.length !== 0) ? meetings.map((e, i) => {
+                        return (
+                            <>
+                                <Card key={e._id || i} variant="outlined" sx={{ mb: 2 }}>
 
-                            <CardContent>
-                                <Typography sx={{ fontsize: 14 }} color="text.secondary" gutterButtom>
-                                    Code: {e.meetingCode}
-                                </Typography>
-                                <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                    Date: {formatDate(e.date)}
-                                </Typography>
-                            </CardContent>
-                        </Card>
-                    </>
+                                    <CardContent>
+                                        <Typography sx={{ fontsize: 14 }} color="text.secondary" gutterButtom>
+                                            Code: {e.meetingCode}
+                                        </Typography>
+                                        <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                                            Date: {formatDate(e.date)}
+                                        </Typography>
+                                    </CardContent>
+                                </Card>
+                            </>
 
-                );
-            })}
+                        )
+                    }) : <></>
+                }
+            }
         </div >
 
     );
