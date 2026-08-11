@@ -31,11 +31,13 @@ export default function LandingPage() {
           </div>
 
           <div className='navlist' style={{ display: 'flex', alignItems: 'center', gap: '2.5rem', fontSize: '1.1rem', fontWeight: '500' }}>
-            <p onClick={() => {
-              router("/auth")
-            }} style={{ cursor: 'pointer', margin: 0, color: '#94a3b8', fontFamily: 'sans-serif', transition: 'color 0.2s' }}>
+            <Link
+              to="/auth"
+              state={{ defaultForm: 0, isGuest: true }}
+              style={{ textDecoration: 'none', color: '#94a3b8', fontFamily: 'sans-serif', transition: 'color 0.2s', cursor: 'pointer' }}
+            >
               Join as Guest
-            </p>
+            </Link>
 
             <Link
             to="/auth"
@@ -73,7 +75,7 @@ export default function LandingPage() {
               Cover a distance by NexMeet Video Call
             </p>
 
-             <Link to="/home" style={{
+             <Link to="/auth" style={{
               textDecoration: 'none',
               background: '#2563eb',
               padding: '0.8rem 2.2rem',

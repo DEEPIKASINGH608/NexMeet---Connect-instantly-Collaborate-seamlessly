@@ -6,7 +6,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import Authentication from './pages/authentication';
 import NexMeetComponent from './pages/NexMeet';
 import HomeComponent from './pages/home';
-
+import History from './pages/history';
 
 function App() {
 

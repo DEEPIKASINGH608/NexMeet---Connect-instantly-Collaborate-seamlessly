@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { TextField, Button, IconButton, Badge } from '@mui/material';
 import io from 'socket.io-client';
 import styles from "../styles/videoComponent.module.css";
@@ -25,26 +25,27 @@ const peerConfigConnections = {
 };
 
 export default function NexMeetComponent() {
-  let socketRef = useRef();
-  let socketIdRef = useRef();
-  let localVideoRef = useRef();
-  let videoRef = useRef([]);
+  const navigate = useNavigate();
+  const { url } = useParams();
+  const socketRef = useRef();
+  const socketIdRef = useRef();
+  const localVideoRef = useRef();
+  const videoRef = useRef([]);
 
-  let { url } = useParams();
+  const [videoAvailable, setVideoAvailable] = useState(true);
+  const [audioAvailable, setAudioAvailable] = useState(true);
+  const [video, setVideo] = useState(true);
+  const [audio, setAudio] = useState(true);
+  const [screen, setScreen] = useState(false);
+  const [showModal, setModal] = useState(false);
 
-  let [videoAvailable, setVideoAvailable] = useState(true);
-  let [audioAvailable, setAudioAvailable] = useState(true);
-  let [video, setVideo] = useState(true);
-  let [audio, setAudio] = useState(true);
-  let [screen, setScreen] = useState(false);
-  let [showModal, setModal] = useState(true);
-  let [screenAvailable, setScreenAvailable] = useState(false);
-  let [messages, setMessages] = useState([]);
-  let [message, setMessage] = useState("");
-  let [newMessages, setNewMessages] = useState(0);
-  let [askForUsername, setAskForUsername] = useState(true);
-  let [username, setUsername] = useState("");
-  let [videos, setVideos] = useState([]);
+  const [screenAvailable, setScreenAvailable] = useState(false);
+  const [messages, setMessages] = useState([]);
+  const [message, setMessage] = useState("");
+  const [newMessages, setNewMessages] = useState(0);
+  const [askForUsername, setAskForUsername] = useState(true);
+  const [username, setUsername] = useState("");
+  const [videos, setVideos] = useState([]);
 
   const getPermissions = async () => {
     try {
@@ -87,29 +88,50 @@ export default function NexMeetComponent() {
     }
   }, [askForUsername]);
 
-  let gotMessageFromServer = (fromId, message) => {
-    var signal = JSON.parse(message);
+  const toggleChatModal = () => {
+    setModal((prev) => {
+      if (!prev) setNewMessages(0);
+      return !prev;
+    });
+  };
+
+  const gotMessageFromServer = (fromId, message) => {
+    const signal = JSON.parse(message);
 
     if (fromId !== socketIdRef.current) {
       if (signal.sdp) {
-        connections[fromId].setRemoteDescription(new RTCSessionDescription(signal.sdp)).then(() => {
+       connections[fromId]
+        .setRemoteDescription(new RTCSessionDescription(signal.sdp))
+        .then(() => {
           if (signal.sdp.type === "offer") {
-            connections[fromId].createAnswer().then((description) => {
-              connections[fromId].setLocalDescription(description).then(() => {
-                if (socketRef.current) {
-                  socketRef.current.emit("signal", fromId, JSON.stringify({ "sdp": connections[fromId].localDescription }));
-                }
-              });
-            });
+            return connections[fromId].createAnswer();
           }
-        }).catch(e => console.log(e));
-      }
-
-      if (signal.ice) {
-        connections[fromId].addIceCandidate(new RTCIceCandidate(signal.ice)).catch(e => console.log(e));
-      }
+        })
+        .then((answer) => {
+          if (answer) {
+            return connections[fromId].setLocalDescription(answer);
+          }
+        })
+        .then(() => {
+          if (connections[fromId].localDescription && socketRef.current) {
+            socketRef.current.emit(
+              "signal",
+              fromId,
+              JSON.stringify({ "sdp": connections[fromId].localDescription })
+            );
+          }
+        })
+        .catch((e) => console.error("SDP processing error:", e));
     }
-  };
+
+    if (signal.ice) {
+      connections[fromId]
+        .addIceCandidate(new RTCIceCandidate(signal.ice))
+        .catch((e) => console.error("ICE Candidate error:", e));
+    }
+  }
+};
+
 
   let addMessage = (data, sender, socketIdSender) => {
     setMessages((prevMessages) => [
@@ -184,24 +206,34 @@ export default function NexMeetComponent() {
 
         try {
           if (connections[id]) {
-            connections[id].createOffer().then((description) => {
-              connections[id].setLocalDescription(description)
-                .then(() => {
-                  if (socketRef.current) {
-                    socketRef.current.emit("signal", id, JSON.stringify({ "sdp": connections[id].localDescription }));
-                  }
-                })
-                .catch(e => console.log(e));
-            });
+            if (connections[id].signalingState === "stable") {
+              connections[id].createOffer().then((description) => {
+                connections[id].setLocalDescription(description)
+                  .then(() => {
+                    if (socketRef.current) {
+                      socketRef.current.emit(
+                        "signal",
+                        id,
+                        JSON.stringify({ "sdp": connections[id].localDescription })
+                      );
+                    }
+                  })
+                  .catch((e) => console.error("Error setting local description:", e));
+              }).catch((e) => console.error("Error creating offer:", e));
+            }
           }
         } catch (e) {
-          console.log(e);
+          console.error("Signal offer creation failed:", e);
         }
       });
     });
   };
 
   let connect = () => {
+    if (!username.trim()) {
+      alert("Please enter a username to continue.");
+      return;
+    }
     setAskForUsername(false);
     setVideo(videoAvailable);
     setAudio(audioAvailable);
@@ -298,17 +330,17 @@ export default function NexMeetComponent() {
       if (socketRef.current) {
         socketRef.current.disconnect();
       }
-
-      window.location.href = "/home";
+      navigate('/home');
     } catch (err) {
       console.error("Error ending call:", err);
     }
   };
 
-  let sendMessage = () => {
-    if (message.trim() !== "") {
+  const sendMessage = () => {
+    if (message.trim() !== "" && socketRef.current) {
       socketRef.current.emit("chat-message", message, username);
       setMessage("");
+
     }
   };
 
@@ -362,7 +394,8 @@ export default function NexMeetComponent() {
                 width: "100%",
                 height: "auto",
                 objectFit: "cover",
-                display: "block"
+                display: "block",
+                transform: "scaleX(-1)"
               }}
             />
           </div>
@@ -458,6 +491,7 @@ export default function NexMeetComponent() {
               autoPlay
               playsInline
               muted
+              style={{ transform: "scaleX(-1)" }}
             />
 
             {showModal && (
@@ -465,33 +499,17 @@ export default function NexMeetComponent() {
                 <div className={styles.chatContainer}>
                   <h1 style={{ color: "#000", margin: "0 0 24px 0", fontSize: "2rem", fontWeight: "bold" }}>
                     Chat
-                   </h1>
+                  </h1>
 
-                   <div className={styles.chattingDisplay}>
-
-                    {messages.length > 0 ? messages.map((item, index) => {
-                      return (
-                        <div style={{marginBottom: "20px"}} key={index}>
-                          <p style={{fontWeight: "bold"}}>{item.sender}</p>
-                          <p>{item.data}</p>
-                        </div>
-                      )
-                    }) : <p>No Messages Yet</p>
-                  }
-
-
-                   </div>
-
-
-
-                  <div className={styles.messagesContainer}>
-                    {messages.map((item, index) => (
-                      <div key={index} style={{ marginBottom: "10px", color: "#333" }}>
-                        <b style={{ color: "#000" }}>{item.sender}: </b>
-                        <span>{item.data}</span>
+                  <div className={styles.chattingDisplay}>
+                    {messages.length > 0 ? messages.map((item, index) => (
+                      <div style={{ marginBottom: "12px" }} key={index}>
+                        <p style={{ fontWeight: "bold", margin: "0 0 4px 0", color: "#2563eb" }}>{item.sender}</p>
+                        <p style={{ margin: 0, color: "#333" }}>{item.data}</p>
                       </div>
-                    ))}
+                    )) : <p style={{ color: "#888" }}>No Messages Yet</p>}
                   </div>
+
 
                   <div className={styles.chatt}>
                     <TextField
@@ -549,7 +567,7 @@ export default function NexMeetComponent() {
             )}
 
             <Badge badgeContent={newMessages} color="primary">
-              <IconButton onClick={() => setModal(!showModal)} style={{ color: "#fff", backgroundColor: "#333", padding: "12px" }}>
+              <IconButton onClick={toggleChatModal} style={{ color: "#fff", backgroundColor: "#333", padding: "12px" }}>
                 <ChatIcon style={{ fontSize: 24 }} />
               </IconButton>
             </Badge>
