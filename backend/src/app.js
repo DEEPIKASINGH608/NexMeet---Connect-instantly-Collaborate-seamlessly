@@ -12,14 +12,24 @@ const io = connectToSocket(server);
 
 app.set("port", process.env.PORT || 8000);
 
-app.use(cors({
-  origin: [
+
+  const allowedOrigins = [
     "http://localhost:5173",
     "https://nexmeetbackend-g4wl.onrender.com"
-  ],
-  credentials: true
-}));
+  , process.env.CLIENT_URL].filter(Boolean);
 
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
 app.use(express.json({ limit: "40kb" }));
 app.use(express.urlencoded({ limit: "40kb", extended: true }));
 
