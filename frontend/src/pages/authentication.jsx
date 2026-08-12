@@ -3,8 +3,6 @@ import { Grid, TextField, Button, Paper, Box, Avatar, CssBaseline, ThemeProvider
 import { LockOutlined as LockOutlinedIcon } from "@mui/icons-material";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
-import server from '../environment';
-
 
 const blueAuthTheme = createTheme({
     palette: {
@@ -44,16 +42,15 @@ export default function AuthForm() {
             setError('');
             if (formState === 0) {
                 await handleLogin(username, password);
-                router("/home");
             }
             if (formState === 1) {
                 let result = await handleRegister(name, username, password);
-                setMessage(result);
+                setMessage(result || "Registration Successful!");
                 setUsername("");
-                setOpen(true);
-                setError("");
-                setFormState(0);
                 setPassword("");
+                setError("");
+                setOpen(true);
+                setFormState(0);
             }
         } catch (err) {
             let errorMessage = err.response?.data?.message || err.message || "An error occurred";
@@ -66,7 +63,7 @@ export default function AuthForm() {
             <Grid container component="main" sx={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center', bgcolor: '#0f172a' }}>
                 <CssBaseline />
 
-                <Grid xs={11} sm={7} md={4}>
+                <Grid item xs={11} sm={7} md={4}>
                     <Paper
                         elevation={12}
                         sx={{
@@ -86,14 +83,14 @@ export default function AuthForm() {
                         <Box sx={{ mb: 3, mt: 1, bgcolor: '#0f172a', p: '4px', borderRadius: '8px' }}>
                             <Button
                                 variant="text"
-                                onClick={() => setFormState(0)}
+                                onClick={() => { setFormState(0); setError(''); }}
                                 sx={{ px: 3, bgcolor: formState === 0 ? '#2563eb' : 'transparent', color: '#ffffff', '&:hover': { bgcolor: formState === 0 ? '#1d4ed8' : 'rgba(255,255,255,0.05)' } }}
                             >
                                 Sign In
                             </Button>
                             <Button
                                 variant="text"
-                                onClick={() => setFormState(1)}
+                                onClick={() => { setFormState(1); setError(''); }}
                                 sx={{ px: 3, bgcolor: formState === 1 ? '#2563eb' : 'transparent', color: '#ffffff', '&:hover': { bgcolor: formState === 1 ? '#1d4ed8' : 'rgba(255,255,255,0.05)' } }}
                             >
                                 Sign Up
@@ -153,7 +150,6 @@ export default function AuthForm() {
                                 fullWidth
                                 variant="contained"
                                 sx={{ mt: 3, mb: 2, py: 1.2, bgcolor: '#2563eb', '&:hover': { bgcolor: '#1d4ed8' }, fontWeight: 'bold', color: '#ffffff', borderRadius: '8px' }}
-
                             >
                                 {formState === 0 ? "Login" : "Register"}
                             </Button>
