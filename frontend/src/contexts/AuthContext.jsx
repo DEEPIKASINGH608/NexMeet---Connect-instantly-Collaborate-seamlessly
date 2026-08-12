@@ -15,7 +15,7 @@ export const AuthProvider = ({ children }) => {
 
     const handleRegister = async (name, username, password) => {
         try {
-            let request = await client.post("/register", {
+            let request = await client.post("/users/register", {
                 name: name,
                 username: username,
                 password: password
@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }) => {
 
     const handleLogin = async (username, password) => {
         try {
-            let request = await client.post("/login", {
+            let request = await client.post("/users/login", {
                 username: username,
                 password: password
             });
