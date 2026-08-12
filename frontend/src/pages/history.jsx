@@ -12,7 +12,6 @@ export default function History() {
 
     const { getHistoryOfUser } = useContext(AuthContext);
     const [meetings, setMeetings] = useState([]);
-    // FIX: Added loading state to distinguish between fetching and empty data
     const [loading, setLoading] = useState(true);
 
     const routeTo = useNavigate();
@@ -25,7 +24,6 @@ export default function History() {
             } catch (error) {
                 console.error("Error fetching history:", error);
             } finally {
-                // FIX: Stop loading indicator once API response returns
                 setLoading(false);
             }
         };
@@ -45,10 +43,8 @@ export default function History() {
     };
 
     return (
-        // FIX: Ensured text color is white and added proper container padding for visibility
         <Box sx={{ p: 3, color: '#ffffff', minHeight: '100vh' }}>
 
-            {/* FIX: Styled Home button explicitly so it's visible on dark backgrounds */}
             <IconButton
                 onClick={() => routeTo("/home")}
                 sx={{ color: '#ffffff', mb: 2 }}
@@ -57,20 +53,17 @@ export default function History() {
             </IconButton>
 
             {loading ? (
-                // FIX: Render a spinner while data is loading
                 <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
                     <CircularProgress color="inherit" />
                 </Box>
             ) : meetings.length > 0 ? (
                 meetings.map((e, i) => (
-                    // FIX: Removed unnecessary Fragment <> wrapper and applied key directly to Card
                     <Card
                         key={e._id || e.id || i}
                         variant="outlined"
                         sx={{ mb: 2, backgroundColor: '#1e1e1e', borderColor: '#333' }}
                     >
                         <CardContent>
-                            {/* FIX: Corrected typos 'fontsize' -> 'fontSize' and 'gutterButtom' -> 'gutterBottom' */}
                             <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                                 Code: <span style={{ color: '#fff' }}>{e.meetingCode || e.meeting_id || 'N/A'}</span>
                             </Typography>
@@ -81,7 +74,6 @@ export default function History() {
                     </Card>
                 ))
             ) : (
-                // FIX: Added clear fallback text when user has no meeting history
                 <Typography variant="body1" sx={{ mt: 2, color: '#aaa' }}>
                     No meeting history found.
                 </Typography>
