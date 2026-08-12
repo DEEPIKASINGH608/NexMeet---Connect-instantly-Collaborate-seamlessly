@@ -1,5 +1,6 @@
 import httpStatus from "http-status";
 import { User } from "../models/user.model.js";
+//import { Meeting } from "../models/meeting.model.js";
 import bcrypt, { hash } from "bcrypt";
 import crypto from "crypto";
 
@@ -16,6 +17,7 @@ const login = async (req, res) => {
         if (!user) {
             return res.status(httpStatus.NOT_FOUND).json({ message: "User not found" });
         }
+
         let isPasswordValid = await bcrypt.compare(password, user.password);
         if (isPasswordValid) {
             let token = crypto.randomBytes(20).toString("hex");
@@ -31,14 +33,14 @@ const login = async (req, res) => {
         return res.status(500).json({ message: "Error logging in", error: e.message });
     }
 
-}
+};
 
 const register = async (req, res) => {
     const { name, username, password } = req.body;
 
     try {
         const existingUser = await User.findOne({ username });
-        if(existingUser) {
+        if (existingUser) {
             return res.status(httpStatus.FOUND).json({ message: "Username already exists" });
         }
 
@@ -57,8 +59,27 @@ const register = async (req, res) => {
     } catch (e) {
         res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: "Error registering user", error: e.message });
     }
-}
+};
 
+const getUserHistory = async (req, res) => {
+    const { token } = req.query;
 
-export { login, register };
+    if (!token) {
+        return res.status(httpStatus.BAD_REQUEST).json({ message: "Token is required" });
+    }
+
+    try {
+        const user = await User.findOne({ token: token });
+        if (!user) {
+            return res.status(httpStatus.NOT_FOUND).json({ message: "User not found" });
+        }
+
+        const meetings = await Meeting.find({ user_id: user.username });
+        return res.status(httpStatus.OK).json(meetings);
+    } catch (e) {
+        return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: `Something went wrong: ${e.message}` });
+    }
+};
+
+export { login, register, getUserHistory };
 

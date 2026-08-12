@@ -37,7 +37,7 @@ export default function History() {
         const month = (date.getMonth() + 1).toString().padStart(2, "0")
         const year = date.getFullYear();
 
-        return `${day}/{month}/${year}`
+        return `${day}/${month}/${year}`;
     }
 
     return (
@@ -48,7 +48,7 @@ export default function History() {
                 <HomeIcon />
             </IconButton>
             {
-                {
+
                     (meetings.length !== 0) ? meetings.map((e, i) => {
                         return (
                             <>
@@ -68,7 +68,7 @@ export default function History() {
                         )
                     }) : <></>
                 }
-            }
+            
         </div >
 
     );

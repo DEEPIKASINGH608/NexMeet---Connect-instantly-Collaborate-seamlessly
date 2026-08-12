@@ -24,6 +24,7 @@ app.use("/api/v1/users", userRoutes);
 app.use("/api/v1", userRoutes);
 
 const start = async () => {
+  try {
   const connectionDb = await mongoose.connect(
     "mongodb+srv://ds0648775_db_user:Dkzq97tp@cluster0.msvxmyb.mongodb.net/"
   );
@@ -33,6 +34,11 @@ const start = async () => {
   server.listen(app.get("port"), () => {
     console.log(`Listening on port ${app.get("port")}`);
   });
+} catch (error) {
+  console.error("Error starting the server:", error);
+}
 };
 
 start();
+
+

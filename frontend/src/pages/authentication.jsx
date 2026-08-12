@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid, TextField, Button, Paper, Box, Avatar, CssBaseline, ThemeProvider, Snackbar, createTheme, FormControlLabel, Checkbox } from "@mui/material";
 import { LockOutlined as LockOutlinedIcon } from "@mui/icons-material";
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
 
 const blueAuthTheme = createTheme({
@@ -29,17 +29,20 @@ export default function AuthForm() {
     const [error, setError] = React.useState('');
     const [message, setMessage] = React.useState('');
     const location = useLocation();
+    const router = useNavigate();
     const initialFormState = location.state?.defaultForm !== undefined ? location.state.defaultForm : 0;
     const [formState, setFormState] = React.useState(initialFormState);
     const [open, setOpen] = React.useState(false);
 
     const { handleRegister, handleLogin } = React.useContext(AuthContext);
 
-    let handleAuth = async () => {
+    let handleAuth = async (e) => {
+        if (e) e.preventDefault();
         try {
             setError('');
             if (formState === 0) {
                 await handleLogin(username, password);
+                router("/home");
             }
             if (formState === 1) {
                 let result = await handleRegister(name, username, password);
@@ -95,7 +98,7 @@ export default function AuthForm() {
                             </Button>
                         </Box>
 
-                        <Box component="form" noValidate sx={{ width: '100%' }}>
+                        <Box component="form" onSubmit={handleAuth} noValidate sx={{ width: '100%' }}>
                             {formState === 1 && (
                                 <TextField
                                     margin="normal"
@@ -144,11 +147,11 @@ export default function AuthForm() {
                             {error && <p style={{ color: "#ef4444", marginTop: '8px', fontSize: '0.9rem' }}>{error}</p>}
 
                             <Button
-                                type="button"
+                                type="submit"
                                 fullWidth
                                 variant="contained"
                                 sx={{ mt: 3, mb: 2, py: 1.2, bgcolor: '#2563eb', '&:hover': { bgcolor: '#1d4ed8' }, fontWeight: 'bold', color: '#ffffff', borderRadius: '8px' }}
-                                onClick={handleAuth}
+
                             >
                                 {formState === 0 ? "Login" : "Register"}
                             </Button>
@@ -161,4 +164,5 @@ export default function AuthForm() {
         </ThemeProvider>
     );
 }
+
 
