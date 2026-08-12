@@ -1,6 +1,5 @@
 import httpStatus from "http-status";
 import { User } from "../models/user.model.js";
-//import { Meeting } from "../models/meeting.model.js";
 import bcrypt, { hash } from "bcrypt";
 import crypto from "crypto";
 
@@ -71,7 +70,7 @@ const getUserHistory = async (req, res) => {
     try {
         const user = await User.findOne({ token: token });
         if (!user) {
-            return res.status(httpStatus.NOT_FOUND).json({ message: "User not found" });
+            return res.status(httpStatus.OK).json([]);
         }
 
         const meetings = await Meeting.find({ user_id: user.username });

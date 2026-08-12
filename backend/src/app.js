@@ -4,7 +4,7 @@ import { Server } from "socket.io";
 import mongoose from 'mongoose';
 import { connectToSocket } from './controllers/socketManagers.js';
 import cors from 'cors';
-import userRoutes from './routes/users.routes.js';
+import userRouter from './routes/users.routes.js';
 
 const app = express();
 const server = createServer(app);
@@ -20,8 +20,12 @@ app.use(cors({
 app.use(express.json({ limit: "40kb" }));
 app.use(express.urlencoded({ limit: "40kb", extended: true }));
 
-app.use("/api/v1/users", userRoutes);
-app.use("/api/v1", userRoutes);
+app.use("/api/v1/users", userRouter);
+app.use("/api/v1", userRouter);
+
+app.use((req, res) => {
+  res.status(404).json({ message: "Route not found" });
+});
 
 const start = async () => {
   try {

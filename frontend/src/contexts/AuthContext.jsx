@@ -59,6 +59,9 @@ export const AuthProvider = ({children}) => {
             });
             return request.data
         } catch (err) {
+            if (err.response && err.response.status === 404) {
+            return [];
+            }
             throw err;
         }
 

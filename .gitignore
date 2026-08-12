@@ -1,0 +1,80 @@
+frontend/node_modules
+backend/node_modules
+
+# Dependencies
+node_modules/
+.pnpm-store/
+.yarn/
+package-lock.json (optional: keep if you want to lock dependency versions)
+
+# Build & Output Folders
+dist/
+build/
+out/
+.next/
+.vite/
+.nuxt/
+
+# Environment Variables & Secrets
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.pem
+*.key
+
+# Python / Flask (if using Python backends)
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+env/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+*.egg-info/
+
+# Logs & Debugging
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Testing & Coverage
+coverage/
+.nyc_output/
+.playwright/
+
+# IDEs & System Files
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# OS Metadata
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+ehthumbs.db
+
+# Deployment / Temporary files
+.vercel
+.render
+.serverless/
+
