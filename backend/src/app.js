@@ -30,13 +30,13 @@ const start = async () => {
   );
 
   console.log(`MONGO connected DB Host: ${connectionDb.connection.host}`);
-
-  server.listen(app.get("port"), () => {
-    console.log(`Listening on port ${app.get("port")}`);
-  });
 } catch (error) {
-  console.error("Error starting the server:", error);
-}
+        console.error("MongoDB Connection Failed:", error.message);
+    }
+
+    server.listen(app.get("port"), () => {
+        console.log(`Listening on port ${app.get("port")}`);
+    });
 };
 
 start();
