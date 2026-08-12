@@ -13,7 +13,10 @@ const io = connectToSocket(server);
 app.set("port", process.env.PORT || 8000);
 
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: [
+    "http://localhost:5173",
+    "https://nexmeetbackend-g4wl.onrender.com"
+  ],
   credentials: true
 }));
 
