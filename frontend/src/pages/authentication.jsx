@@ -3,6 +3,8 @@ import { Grid, TextField, Button, Paper, Box, Avatar, CssBaseline, ThemeProvider
 import { LockOutlined as LockOutlinedIcon } from "@mui/icons-material";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
+import server from '../environment';
+
 
 const blueAuthTheme = createTheme({
     palette: {

@@ -11,6 +11,8 @@ import VideocamOffIcon from '@mui/icons-material/VideocamOff';
 import CallEndIcon from '@mui/icons-material/CallEnd';
 import ChatIcon from '@mui/icons-material/Chat';
 import StopScreenShareIcon from '@mui/icons-material/StopScreenShare';
+import server from '../environment';
+
 
 const server_url = server;
 

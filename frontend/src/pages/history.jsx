@@ -7,6 +7,8 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { IconButton, Box, CircularProgress } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
+import server from '../environment';
+
 
 export default function History() {
 
