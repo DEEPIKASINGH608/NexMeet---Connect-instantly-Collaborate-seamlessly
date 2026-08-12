@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import withAuth from '../utils/withAuth';
 import "../App.css";
+import server from '../environment';
 
 import {
   Button,
