@@ -32,6 +32,7 @@ Socket.io Signaling Server: A dedicated bi-directional WebSocket connection matr
 
 📁 Repository Directory Structure
 
+```text
 ZoomClone/
 ├── backend/
 │   ├── src/
@@ -81,6 +82,7 @@ ZoomClone/
 │   └── vite.config.js
 ├── .gitignore
 └── Readme.md
+```
 
 ⚙️ Deployment & Environment Orchestration
 Prerequisites
